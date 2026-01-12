@@ -44,9 +44,9 @@ export function Footer() {
                     <div>
                         <h4 className="text-3xl font-bold mb-6">{t('footer.brands')}</h4>
                         <ul className="space-y-3 text-lg font-semibold text-slate-800">
-                            <li><Link href="/stores" className="hover:text-red-600 transition-colors">{t('nav.stores')}</Link></li>
-                            <li><Link href="/dining" className="hover:text-red-600 transition-colors">{t('nav.dining')}</Link></li>
-                            <li><Link href="/entertainment" className="hover:text-red-600 transition-colors">{t('nav.entertainment')}</Link></li>
+                            <li><Link href="/magazalar" className="hover:text-red-600 transition-colors">{t('nav.stores')}</Link></li>
+                            <li><Link href="/restorantlar" className="hover:text-red-600 transition-colors">{t('nav.dining')}</Link></li>
+                            <li><Link href="/eglence" className="hover:text-red-600 transition-colors">{t('nav.entertainment')}</Link></li>
                         </ul>
                     </div>
 
@@ -54,8 +54,8 @@ export function Footer() {
                     <div>
                         <h4 className="text-3xl font-bold mb-6">Acity Ankara</h4>
                         <ul className="space-y-3 text-lg font-semibold text-slate-800 mb-8">
-                            <li><Link href="/brands" className="hover:text-red-600 transition-colors">{t('footer.brands')}</Link></li>
-                            <li><Link href="/contact" className="hover:text-red-600 transition-colors">{t('footer.write_us')}</Link></li>
+                            <li><Link href="/magazalar" className="hover:text-red-600 transition-colors">{t('footer.brands')}</Link></li>
+                            <li><Link href="/iletisim" className="hover:text-red-600 transition-colors">{t('footer.write_us')}</Link></li>
                         </ul>
 
                         <div className="flex gap-4">
