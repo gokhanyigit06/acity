@@ -88,6 +88,7 @@ const MEGA_MENUS: Record<string, MegaMenuItem> = {
     }
 };
 
+import { useLanguage } from '@/context/LanguageContext';
 import { supabase } from '@/lib/supabase';
 
 interface NavbarProps {
@@ -95,12 +96,17 @@ interface NavbarProps {
 }
 
 export function Navbar({ megaMenuSettings }: NavbarProps) {
+    const { language, setLanguage, t } = useLanguage();
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [fetchedSettings, setFetchedSettings] = useState<Record<string, any> | null>(null);
     const router = useRouter();
+
+    const toggleLanguage = () => {
+        setLanguage(language === 'tr' ? 'en' : 'tr');
+    };
 
     useEffect(() => {
         if (megaMenuSettings) return;
@@ -135,13 +141,18 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
         Object.keys(displayMenus).forEach(menuKey => {
             const settingKey = `mega_menu_${menuKey}`;
             if (effectiveSettings[settingKey]) {
-                // Override images if present in settings
+                // Override images if present in settings and valid
                 const dynamicData = effectiveSettings[settingKey];
-                if (dynamicData.images && Array.isArray(dynamicData.images)) {
-                    displayMenus[menuKey] = {
-                        ...displayMenus[menuKey],
-                        images: dynamicData.images
-                    };
+                if (dynamicData.images && Array.isArray(dynamicData.images) && dynamicData.images.length > 0) {
+                    // Check if all images have a valid source
+                    const hasValidImages = dynamicData.images.every((img: any) => img.src && typeof img.src === 'string' && img.src.length > 10); // basic check
+
+                    if (hasValidImages) {
+                        displayMenus[menuKey] = {
+                            ...displayMenus[menuKey],
+                            images: dynamicData.images
+                        };
+                    }
                 }
             }
         });
@@ -257,6 +268,12 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                             </button>
                         ) : (
                             <>
+                                <button
+                                    onClick={toggleLanguage} // Assuming toggleLanguage and 'language' state are defined elsewhere
+                                    className="hover:opacity-70 transition-opacity text-sm font-bold px-3 py-1 rounded-md border border-neutral-200 hover:border-neutral-800"
+                                >
+                                    {language === 'en' ? 'TR' : 'EN'}
+                                </button>
                                 <Link
                                     href="https://www.google.com/maps/dir//Acity+Alışveriş+Merkezi,+Macun,+Fatih+Sultan+Mehmet+Blv+No:244,+06374+Yenimahalle%2FAnkara"
                                     target="_blank"
@@ -378,18 +395,21 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
 
                                 {/* Right Column: Images */}
                                 <div className="w-3/4 grid grid-cols-3 gap-6">
-                                    {displayMenus[activeMenu].images.map((img, idx) => (
-                                        <div key={idx} className="relative h-full rounded-2xl overflow-hidden group">
-                                            <Image
-                                                src={img.src}
-                                                alt={img.alt}
-                                                fill
-                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                            />
-                                            {/* Overlay effect tailored to match screenshot somewhat (subtle darken) */}
-                                            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
-                                        </div>
-                                    ))}
+                                    {displayMenus[activeMenu].images.map((img, idx) => {
+                                        console.log('Rendering mega menu image:', img);
+                                        return (
+                                            <div key={idx} className="relative h-full rounded-2xl overflow-hidden group">
+                                                {/* Using standard img tag to bypass Next.js optimization for debugging */}
+                                                <img
+                                                    src={img.src}
+                                                    alt={img.alt}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                />
+                                                {/* Overlay effect tailored to match screenshot somewhat (subtle darken) */}
+                                                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </div>
                         )}

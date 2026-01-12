@@ -19,47 +19,27 @@ interface Dining {
 
 const ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
 
+import { useLanguage } from '@/context/LanguageContext';
+
+// ... (keep usage)
+
 export default function DiningPage() {
+    const { t } = useLanguage();
     const [stores, setStores] = useState<Dining[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
-
-    // Fetch Data from Supabase
-    useEffect(() => {
-        const fetchDining = async () => {
-            try {
-                // Fetch all stores that are categorized as dining (Yeme-İçme)
-                // Since we imported them as 'Yeme-İçme', we filter by that.
-                const { data, error } = await supabase
-                    .from('stores')
-                    .select('*')
-                    .eq('category', 'Yeme-İçme'); // Filter specific to dining page
-
-                if (error) throw error;
-
-                if (data) {
-                    setStores(data);
-                }
-            } catch (error) {
-                console.error('Error fetching dining spots:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchDining();
-    }, []);
+    // ...
 
     // Filtering Logic
     const filteredDining = stores.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesLetter = selectedLetter ? item.name.startsWith(selectedLetter) : true;
         const matchesFloor = selectedFloor ? item.floor === selectedFloor : true;
-        // Since all current data is 'Yeme-İçme', fine-grained filtering won't work yet unless we update data.
-        // Keeping logic generic for now.
+
+        // Match category exactly if selected, otherwise allow all
         const matchesCategory = selectedCategory ? item.category === selectedCategory : true;
 
         return matchesSearch && matchesLetter && matchesFloor && matchesCategory;
@@ -72,7 +52,7 @@ export default function DiningPage() {
             {/* Header */}
             <div className="bg-white border-b border-slate-200">
                 <div className="container mx-auto px-4 py-8">
-                    <h1 className="text-3xl font-bold text-slate-900 mb-8">Cafe & Restorant</h1>
+                    <h1 className="text-3xl font-bold text-slate-900 mb-8">{t('dining.title')}</h1>
 
                     {/* Top Filters */}
                     <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -83,11 +63,11 @@ export default function DiningPage() {
                                 value={selectedFloor}
                                 onChange={(e) => setSelectedFloor(e.target.value)}
                             >
-                                <option value="">Kata Göre</option>
-                                <option value="-1. Kat">-1. Kat</option>
-                                <option value="Zemin Kat">Zemin Kat</option>
-                                <option value="1. Kat">1. Kat</option>
-                                <option value="2. Kat">2. Kat</option>
+                                <option value="">{t('common.floor_select')}</option>
+                                <option value="-1. Kat">{t('floor.minus_1')}</option>
+                                <option value="Zemin Kat">{t('floor.ground')}</option>
+                                <option value="1. Kat">{t('floor.1')}</option>
+                                <option value="2. Kat">{t('floor.2')}</option>
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
@@ -99,9 +79,9 @@ export default function DiningPage() {
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
-                                <option value="">Kategoriye Göre</option>
+                                <option value="">{t('common.category_select')}</option>
                                 {/* Updated options based on current data, can add more as data enriches */}
-                                <option value="Yeme-İçme">Tümü (Yeme-İçme)</option>
+                                <option value="Yeme-İçme">{t('category.dining_all')}</option>
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
@@ -110,7 +90,7 @@ export default function DiningPage() {
                         <div className="relative w-full md:w-1/2 ml-auto">
                             <input
                                 type="text"
-                                placeholder="Restoran Ara"
+                                placeholder={t('dining.search_placeholder')}
                                 className="w-full h-12 pl-4 pr-12 bg-slate-50 border-none text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-100"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -125,7 +105,7 @@ export default function DiningPage() {
                             onClick={() => setSelectedLetter(null)}
                             className={`text-sm font-medium transition-colors ${selectedLetter === null ? 'text-red-600' : 'text-slate-300 hover:text-slate-500'}`}
                         >
-                            TÜMÜ
+                            {t('common.all')}
                         </button>
                         {ALPHABET.map((char) => (
                             <button
@@ -144,7 +124,7 @@ export default function DiningPage() {
             {/* Results Grid */}
             <div className="container mx-auto px-4 py-12">
                 {loading ? (
-                    <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+                    <div className="text-center py-20 text-slate-400">{t('common.loading')}</div>
                 ) : (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -182,7 +162,7 @@ export default function DiningPage() {
 
                         {filteredDining.length === 0 && (
                             <div className="text-center py-20 text-slate-400">
-                                Aradığınız kriterlere uygun restoran bulunamadı.
+                                {t('dining.no_results')}
                             </div>
                         )}
                     </>

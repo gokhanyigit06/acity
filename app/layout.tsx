@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   description: "Ankara'nın en kaliteli outlet alışveriş merkezi.",
 };
 
+import { LanguageProvider } from "@/context/LanguageContext";
+
+// ...
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +26,9 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} font-sans antialiased`}
       >
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

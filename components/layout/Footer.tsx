@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { Facebook, Instagram, ChevronUp } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function Footer() {
+    const { t } = useLanguage();
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -23,28 +25,28 @@ export function Footer() {
                     <div className="space-y-6 md:col-span-2">
                         <h4 className="text-3xl font-bold">Acity Alışveriş ve Eğlence Merkezi</h4>
                         <div className="text-lg space-y-1 text-slate-600">
-                            <p>Macun Mah. Fatih Sultan Mehmet Bulvarı</p>
-                            <p>No:244 Yenimahalle</p>
-                            <p>Ankara</p>
+                            <p>{t('footer.address_line1')}</p>
+                            <p>{t('footer.address_line2')}</p>
+                            <p>{t('footer.address_city')}</p>
                         </div>
 
                         <div className="text-lg space-y-1 font-semibold text-slate-800 pt-4">
-                            <p>Telefon: 444 3 192</p>
-                            <p>Email: info@acity.com.tr</p>
+                            <p>{t('footer.phone')}: 444 3 192</p>
+                            <p>{t('footer.email')}: info@acity.com.tr</p>
                         </div>
 
                         <div className="pt-6">
-                            <p className="font-bold text-slate-900 text-lg">Çalışma Saatleri : 10:00 — 22:00</p>
+                            <p className="font-bold text-slate-900 text-lg">{t('footer.hours')} : 10:00 — 22:00</p>
                         </div>
                     </div>
 
                     {/* Middle Column */}
                     <div>
-                        <h4 className="text-3xl font-bold mb-6">Markalar</h4>
+                        <h4 className="text-3xl font-bold mb-6">{t('footer.brands')}</h4>
                         <ul className="space-y-3 text-lg font-semibold text-slate-800">
-                            <li><Link href="/stores" className="hover:text-red-600 transition-colors">Mağazalar</Link></li>
-                            <li><Link href="/dining" className="hover:text-red-600 transition-colors">Cafe & Restorant</Link></li>
-                            <li><Link href="/entertainment" className="hover:text-red-600 transition-colors">Eğlence</Link></li>
+                            <li><Link href="/stores" className="hover:text-red-600 transition-colors">{t('nav.stores')}</Link></li>
+                            <li><Link href="/dining" className="hover:text-red-600 transition-colors">{t('nav.dining')}</Link></li>
+                            <li><Link href="/entertainment" className="hover:text-red-600 transition-colors">{t('nav.entertainment')}</Link></li>
                         </ul>
                     </div>
 
@@ -52,8 +54,8 @@ export function Footer() {
                     <div>
                         <h4 className="text-3xl font-bold mb-6">Acity Ankara</h4>
                         <ul className="space-y-3 text-lg font-semibold text-slate-800 mb-8">
-                            <li><Link href="/brands" className="hover:text-red-600 transition-colors">Markalar</Link></li>
-                            <li><Link href="/contact" className="hover:text-red-600 transition-colors">Bize Yazın</Link></li>
+                            <li><Link href="/brands" className="hover:text-red-600 transition-colors">{t('footer.brands')}</Link></li>
+                            <li><Link href="/contact" className="hover:text-red-600 transition-colors">{t('footer.write_us')}</Link></li>
                         </ul>
 
                         <div className="flex gap-4">
@@ -78,7 +80,7 @@ export function Footer() {
                             <ChevronUp className="w-6 h-6" />
                         </button>
                         <p className="text-xs text-slate-500 font-medium">
-                            The Copyright RVZ © 2026 All Rights Reserved.
+                            {t('footer.rights')}
                         </p>
                     </div>
                 </div>

@@ -4,23 +4,22 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 
+import { useLanguage } from '@/context/LanguageContext';
+
 export interface StorySectionSettings {
     image: string;
     title: string;
     description: string;
 }
 
-const DEFAULT_SETTINGS: StorySectionSettings = {
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
-    title: "ALIŞVERİŞİN\nPARLAYAN YILDIZI",
-    description: "Acity Mall, Ankara'nın alışveriş ve yaşam kültüründe değişimi izleyen ve yeniliği belirleyen bir konumda yer alıyor. Kuruluş yıllarındaki outlet kimliğinden üst segment bir alışveriş merkezine dönüşerek, seçkin markaları ve özgün deneyimleri bir araya getiriyor."
-};
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
 
 interface StorySectionProps {
     initialData?: StorySectionSettings | null;
 }
 
 export function StorySection({ initialData }: StorySectionProps) {
+    const { t } = useLanguage();
     const [settings, setSettings] = useState<StorySectionSettings | null>(initialData || null);
 
     useEffect(() => {
@@ -43,7 +42,14 @@ export function StorySection({ initialData }: StorySectionProps) {
         fetchSettings();
     }, [initialData]);
 
-    const data = settings || DEFAULT_SETTINGS;
+    // Use settings if available, otherwise use translations
+    // Note: If settings are present (from DB), they will override translations.
+    // This allows admin to customize text, but might break multi-language if DB only stores one language.
+    const displayData = {
+        image: settings?.image || DEFAULT_IMAGE,
+        title: settings?.title || t('home.story_title'),
+        description: settings?.description || t('home.story_description')
+    };
 
     return (
         <section className="py-4 bg-white">
@@ -52,11 +58,11 @@ export function StorySection({ initialData }: StorySectionProps) {
                     {/* Left Side - Content */}
                     <div className="w-full text-center flex flex-col items-center justify-center space-y-4 order-2 md:order-1">
                         <h2 className="text-3xl md:text-4xl font-light text-slate-900 leading-tight uppercase tracking-wider whitespace-pre-line">
-                            {data.title}
+                            {displayData.title}
                         </h2>
 
                         <p className="text-slate-600 text-base leading-relaxed max-w-lg mx-auto">
-                            {data.description}
+                            {displayData.description}
                         </p>
                     </div>
 
@@ -64,8 +70,8 @@ export function StorySection({ initialData }: StorySectionProps) {
                     <div className="relative aspect-square w-full order-1 md:order-2 max-h-[500px]">
                         <div className="relative w-full h-full overflow-hidden">
                             <Image
-                                src={data.image}
-                                alt="Alışverişin Parlayan Yıldızı"
+                                src={displayData.image}
+                                alt={t('home.story_alt')}
                                 fill
                                 className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
                             />

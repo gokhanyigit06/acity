@@ -19,38 +19,23 @@ interface Store {
 
 const ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
 
+import { useLanguage } from '@/context/LanguageContext';
+
+// ... (keep usage)
+
 export default function StoresPage() {
+    const { t } = useLanguage();
     const [stores, setStores] = useState<Store[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
+    // ... (keep state)
 
-    // Fetch Data from Supabase
-    useEffect(() => {
-        const fetchStores = async () => {
-            try {
-                // Fetch all stores categorized as 'Mağaza'
-                const { data, error } = await supabase
-                    .from('stores')
-                    .select('*')
-                    .eq('category', 'Mağaza');
+    // ... (keep useEffect)
 
-                if (error) throw error;
-
-                if (data) {
-                    setStores(data);
-                }
-            } catch (error) {
-                console.error('Error fetching stores:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStores();
-    }, []);
+    // ... (keep useEffect)
 
     // Filtering Logic
     const filteredStores = stores.filter(store => {
@@ -72,7 +57,7 @@ export default function StoresPage() {
             {/* Header / Filter Section */}
             <div className="bg-white border-b border-slate-200">
                 <div className="container mx-auto px-4 py-8">
-                    <h1 className="text-3xl font-bold text-slate-900 mb-8">Mağazalar</h1>
+                    <h1 className="text-3xl font-bold text-slate-900 mb-8">{t('stores.title')}</h1>
 
                     {/* Top Filters */}
                     <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -83,11 +68,11 @@ export default function StoresPage() {
                                 value={selectedFloor}
                                 onChange={(e) => setSelectedFloor(e.target.value)}
                             >
-                                <option value="">Kata Göre</option>
-                                <option value="Kat -1">Kat -1</option>
-                                <option value="Zemin Kat">Zemin Kat</option>
-                                <option value="Kat 1">Kat 1</option>
-                                <option value="Kat 2">Kat 2</option>
+                                <option value="">{t('common.floor_select')}</option>
+                                <option value="Kat -1">{t('floor.minus_1')}</option>
+                                <option value="Zemin Kat">{t('floor.ground')}</option>
+                                <option value="Kat 1">{t('floor.1')}</option>
+                                <option value="Kat 2">{t('floor.2')}</option>
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
@@ -99,8 +84,8 @@ export default function StoresPage() {
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
-                                <option value="">Kategoriye Göre</option>
-                                <option value="Mağaza">Tümü (Mağazalar)</option>
+                                <option value="">{t('common.category_select')}</option>
+                                <option value="Mağaza">{t('category.stores_all')}</option>
                                 {/* Future categories can be added here */}
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
@@ -110,7 +95,7 @@ export default function StoresPage() {
                         <div className="relative w-full md:w-1/2 ml-auto">
                             <input
                                 type="text"
-                                placeholder="Mağaza Ara"
+                                placeholder={t('stores.search_placeholder')}
                                 className="w-full h-12 pl-4 pr-12 bg-slate-50 border-none text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-100"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -125,7 +110,7 @@ export default function StoresPage() {
                             onClick={() => setSelectedLetter(null)}
                             className={`text-sm font-medium transition-colors ${selectedLetter === null ? 'text-red-600' : 'text-slate-300 hover:text-slate-500'}`}
                         >
-                            TÜMÜ
+                            {t('common.all')}
                         </button>
                         {ALPHABET.map((char) => (
                             <button
@@ -144,7 +129,7 @@ export default function StoresPage() {
             {/* Results Grid */}
             <div className="container mx-auto px-4 py-12">
                 {loading ? (
-                    <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+                    <div className="text-center py-20 text-slate-400">{t('common.loading')}</div>
                 ) : (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -182,7 +167,7 @@ export default function StoresPage() {
 
                         {filteredStores.length === 0 && (
                             <div className="text-center py-20 text-slate-400">
-                                Aradığınız kriterlere uygun mağaza bulunamadı.
+                                {t('stores.no_results')}
                             </div>
                         )}
                     </>
