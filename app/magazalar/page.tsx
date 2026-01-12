@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { supabase } from '@/lib/supabase';
 
 // Types
+// Types
 interface Store {
     id: number;
     name: string;
@@ -17,43 +18,57 @@ interface Store {
     slug: string;
 }
 
+interface Category {
+    id: number;
+    name: string;
+}
+
 const ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
 
 import { useLanguage } from '@/context/LanguageContext';
 
-// ... (keep usage)
-
 export default function StoresPage() {
     const { t } = useLanguage();
     const [stores, setStores] = useState<Store[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
-    // ... (keep state)
 
     // Fetch Data from Supabase
     useEffect(() => {
         let mounted = true;
 
-        const fetchStores = async () => {
+        const fetchData = async () => {
             try {
-                // Fetch all stores categorized as 'Mağaza'
-                const { data, error } = await supabase
+                // Fetch categories
+                const { data: categoriesData } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .order('name');
+
+                if (mounted && categoriesData) {
+                    setCategories(categoriesData);
+                }
+
+                // Fetch stores (excluding Dining and Entertainment)
+                const { data: storesData, error } = await supabase
                     .from('stores')
                     .select('*')
-                    .eq('category', 'Mağaza');
+                    .neq('category', 'Yeme-İçme')
+                    .neq('category', 'Eğlence');
 
                 if (error) {
                     throw error;
                 }
 
-                if (mounted && data) {
-                    setStores(data);
+                if (mounted && storesData) {
+                    setStores(storesData);
                 }
             } catch (error) {
-                console.error('Error fetching stores:', error);
+                console.error('Error fetching data:', error);
             } finally {
                 if (mounted) {
                     setLoading(false);
@@ -61,7 +76,7 @@ export default function StoresPage() {
             }
         };
 
-        fetchStores();
+        fetchData();
 
         return () => {
             mounted = false;
@@ -73,9 +88,6 @@ export default function StoresPage() {
         const matchesSearch = store.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesLetter = selectedLetter ? store.name.startsWith(selectedLetter) : true;
         const matchesFloor = selectedFloor ? store.floor === selectedFloor : true;
-
-        // Since all new stores are just 'Mağaza', detailed category filter isn't fully ready yet.
-        // We allow filtering if selected, but currently data is uniform.
         const matchesCategory = selectedCategory ? store.category === selectedCategory : true;
 
         return matchesSearch && matchesLetter && matchesFloor && matchesCategory;
@@ -116,8 +128,9 @@ export default function StoresPage() {
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
                                 <option value="">{t('common.category_select')}</option>
-                                <option value="Mağaza">{t('category.stores_all')}</option>
-                                {/* Future categories can be added here */}
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                ))}
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
