@@ -83,6 +83,12 @@ const DEFAULT_SETTINGS_MAP: Record<string, { label: string, value: any }> = {
         value: {
             text: "Acity Mall * Acity Mall * Acity Mall * Acity Mall * Acity Mall * "
         }
+    },
+    'about_us': {
+        label: 'Hakkımızda Sayfası',
+        value: {
+            image: "https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?w=1600&q=80"
+        }
     }
 };
 
@@ -236,6 +242,7 @@ export default function SiteSettingsPage() {
     const storySetting = settings.find(s => s.key === 'story_section');
     const featuredBrandsSetting = settings.find(s => s.key === 'featured_brands');
     const scrollingTextSetting = settings.find(s => s.key === 'scrolling_text');
+    const aboutUsSetting = settings.find(s => s.key === 'about_us');
     const megaMenuSettings = settings.filter(s => s.key.startsWith('mega_menu_'));
 
     return (
@@ -567,6 +574,31 @@ export default function SiteSettingsPage() {
                                     />
                                 </div>
                                 <p className="text-xs text-slate-500 mt-1">Yazının tekrarlanarak kayması için kısa ve öz bir metin giriniz. Ayırıcı olarak * veya - kullanabilirsiniz.</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* About Us Settings */}
+                    {aboutUsSetting && (
+                        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                            <div className="flex items-center gap-2 border-b border-slate-100 pb-4 mb-4">
+                                <FileText className="w-5 h-5 text-red-600" />
+                                <h2 className="font-semibold text-slate-800">{aboutUsSetting.label}</h2>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Kapak Görseli</label>
+                                <div className="space-y-2">
+                                    <div className="h-48 bg-slate-100 rounded-lg overflow-hidden relative border border-slate-200">
+                                        <img src={aboutUsSetting.value.image} alt="About Hero" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <input type="text" className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-xs" value={aboutUsSetting.value.image} onChange={(e) => updateSettingValue('about_us', 'image', e.target.value)} />
+                                        <label className="cursor-pointer px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg flex items-center gap-2">
+                                            <input type="file" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'about_us', 'image')} />
+                                            <ImageIcon className="w-4 h-4" />
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

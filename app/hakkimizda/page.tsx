@@ -16,8 +16,28 @@ import {
     Users,
     HelpingHand
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function AboutPage() {
+    const [heroImage, setHeroImage] = useState("https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?w=1600&q=80");
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const { data } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'about_us')
+                .single();
+
+            if (data?.value?.image) {
+                setHeroImage(data.value.image);
+            }
+        };
+
+        fetchSettings();
+    }, []);
+
     // Services data
     const services = [
         { name: 'Ücretsiz Hızlı Wi-Fi', icon: Wifi },
@@ -41,7 +61,7 @@ export default function AboutPage() {
             {/* Hero Section */}
             <div className="relative h-[40vh] min-h-[400px] w-full overflow-hidden">
                 <img
-                    src="https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?w=1600&q=80"
+                    src={heroImage}
                     alt="Acity Mall"
                     className="w-full h-full object-cover"
                 />
