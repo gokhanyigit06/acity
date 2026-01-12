@@ -58,7 +58,8 @@ export default function StoresPage() {
                     .from('stores')
                     .select('*')
                     .neq('category', 'Yeme-İçme')
-                    .neq('category', 'Eğlence');
+                    .neq('category', 'Eğlence')
+                    .order('name', { ascending: true });
 
                 if (error) {
                     throw error;
@@ -127,7 +128,7 @@ export default function StoresPage() {
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
-                                <option value="">{t('common.category_select')}</option>
+                                <option value="">{t('category.stores_all')}</option>
                                 {categories.map((cat) => (
                                     <option key={cat.id} value={cat.name}>{cat.name}</option>
                                 ))}
