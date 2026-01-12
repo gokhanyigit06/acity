@@ -33,9 +33,40 @@ export default function StoresPage() {
     const [selectedCategory, setSelectedCategory] = useState("");
     // ... (keep state)
 
-    // ... (keep useEffect)
+    // Fetch Data from Supabase
+    useEffect(() => {
+        let mounted = true;
 
-    // ... (keep useEffect)
+        const fetchStores = async () => {
+            try {
+                // Fetch all stores categorized as 'Mağaza'
+                const { data, error } = await supabase
+                    .from('stores')
+                    .select('*')
+                    .eq('category', 'Mağaza');
+
+                if (error) {
+                    throw error;
+                }
+
+                if (mounted && data) {
+                    setStores(data);
+                }
+            } catch (error) {
+                console.error('Error fetching stores:', error);
+            } finally {
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchStores();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     // Filtering Logic
     const filteredStores = stores.filter(store => {
