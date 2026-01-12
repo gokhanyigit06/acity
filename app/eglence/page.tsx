@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
 // Types
 interface Store {
@@ -15,6 +16,7 @@ interface Store {
     floor: string;
     phone: string;
     logo_url: string;
+    slug: string;
 }
 
 const ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
@@ -159,7 +161,11 @@ export default function EntertainmentPage() {
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredItems.map((item) => (
-                                <div key={item.id} className="bg-white border border-slate-200 p-6 flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
+                                <Link
+                                    href={`/magazalar/${item.slug}`}
+                                    key={item.id}
+                                    className="bg-white border border-slate-200 p-6 flex items-center gap-6 group hover:shadow-lg transition-all duration-300 block"
+                                >
 
                                     {/* Image/Logo Area */}
                                     <div className="w-1/3 shrink-0">
@@ -179,13 +185,13 @@ export default function EntertainmentPage() {
 
                                     {/* Details Area */}
                                     <div className="w-2/3 space-y-2">
-                                        <h3 className="font-bold text-slate-900 leading-tight">{item.name}</h3>
+                                        <h3 className="font-bold text-slate-900 leading-tight group-hover:text-red-600 transition-colors">{item.name}</h3>
                                         <p className="text-sm text-slate-500">{item.category}</p>
                                         <p className="text-sm text-slate-900 font-medium">{item.phone || "-"}</p>
                                         <p className="text-xs text-slate-400">{item.floor}</p>
                                     </div>
 
-                                </div>
+                                </Link>
                             ))}
                         </div>
 
