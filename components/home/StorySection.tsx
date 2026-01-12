@@ -46,22 +46,22 @@ export function StorySection({ initialData }: StorySectionProps) {
     const data = settings || DEFAULT_SETTINGS;
 
     return (
-        <section className="pb-10 pt-4 bg-white">
+        <section className="py-4 bg-white">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                     {/* Left Side - Content */}
-                    <div className="w-full text-center flex flex-col items-center justify-center space-y-6 order-2 md:order-1">
-                        <h2 className="text-4xl md:text-5xl font-light text-slate-900 leading-tight uppercase tracking-wider whitespace-pre-line">
+                    <div className="w-full text-center flex flex-col items-center justify-center space-y-4 order-2 md:order-1">
+                        <h2 className="text-3xl md:text-4xl font-light text-slate-900 leading-tight uppercase tracking-wider whitespace-pre-line">
                             {data.title}
                         </h2>
 
-                        <p className="text-slate-600 text-lg leading-relaxed max-w-lg mx-auto">
+                        <p className="text-slate-600 text-base leading-relaxed max-w-lg mx-auto">
                             {data.description}
                         </p>
                     </div>
 
                     {/* Right Side - Image */}
-                    <div className="relative aspect-square w-full order-1 md:order-2">
+                    <div className="relative aspect-square w-full order-1 md:order-2 max-h-[500px]">
                         <div className="relative w-full h-full overflow-hidden">
                             <Image
                                 src={data.image}

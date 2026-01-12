@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Search, MapPin, ChevronDown, ArrowRight, X, Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
@@ -88,6 +88,8 @@ const MEGA_MENUS: Record<string, MegaMenuItem> = {
     }
 };
 
+import { supabase } from '@/lib/supabase';
+
 interface NavbarProps {
     megaMenuSettings?: Record<string, any>;
 }
@@ -97,16 +99,44 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [fetchedSettings, setFetchedSettings] = useState<Record<string, any> | null>(null);
     const router = useRouter();
+
+    useEffect(() => {
+        if (megaMenuSettings) return;
+
+        const fetchSettings = async () => {
+            try {
+                const { data } = await supabase
+                    .from('site_settings')
+                    .select('key, value')
+                    .like('key', 'mega_menu_%');
+
+                if (data) {
+                    const settings: Record<string, any> = {};
+                    data.forEach(item => {
+                        settings[item.key] = item.value;
+                    });
+                    setFetchedSettings(settings);
+                }
+            } catch (error) {
+                console.error('Error fetching menu settings:', error);
+            }
+        };
+
+        fetchSettings();
+    }, [megaMenuSettings]);
+
+    const effectiveSettings = megaMenuSettings || fetchedSettings;
 
     // Merge default menus with dynamic settings
     const displayMenus = { ...MEGA_MENUS };
-    if (megaMenuSettings) {
+    if (effectiveSettings) {
         Object.keys(displayMenus).forEach(menuKey => {
             const settingKey = `mega_menu_${menuKey}`;
-            if (megaMenuSettings[settingKey]) {
+            if (effectiveSettings[settingKey]) {
                 // Override images if present in settings
-                const dynamicData = megaMenuSettings[settingKey];
+                const dynamicData = effectiveSettings[settingKey];
                 if (dynamicData.images && Array.isArray(dynamicData.images)) {
                     displayMenus[menuKey] = {
                         ...displayMenus[menuKey],
