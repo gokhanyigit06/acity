@@ -29,8 +29,57 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]); // Multi-category selection
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const router = useRouter();
+
+    // ... (keep useEffects)
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files?.[0] || !store) return;
+
+        const file = e.target.files[0];
+        setUploading(true);
+        setMessage(null);
+
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `logos/${Date.now()}-${store.id}.${fileExt}`;
+
+            // Upload
+            const { error: uploadError } = await supabase.storage
+                .from('image')
+                .upload(fileName, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            // Get URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('image')
+                .getPublicUrl(fileName);
+
+            // Update local state
+            setStore({ ...store, logo_url: publicUrl });
+            setMessage({ type: 'success', text: 'Logo yüklendi! Kaydetmeyi unutmayın.' });
+
+        } catch (error: any) {
+            console.error('Upload Error:', error);
+            setMessage({ type: 'error', text: 'Dosya yüklenirken hata oluştu.' });
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    // ... (keep toggleCategory & handleSave) 
+    // Wait, I should implement the handler inside the component body, but I can't overwrite the whole component with replace_file_content easily due to size.
+    // I will split this into two edits.
+    // First edit: Add state and function handler. 
+    // Second edit: Update JSX.
+    // Actually I can try to do it smart.
+
+    // Edit 1: Add state variables and `handleFileUpload` function.
+    // I will replace the state definition block.
+
 
     // Check Auth & Fetch Data
     useEffect(() => {
@@ -282,13 +331,26 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-700">Logo URL</label>
-                            <input
-                                type="text"
-                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm font-mono text-slate-600"
-                                placeholder="https://..."
-                                value={store.logo_url || ''}
-                                onChange={e => setStore({ ...store, logo_url: e.target.value })}
-                            />
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm font-mono text-slate-600"
+                                    placeholder="https://..."
+                                    value={store.logo_url || ''}
+                                    onChange={e => setStore({ ...store, logo_url: e.target.value })}
+                                />
+                                <label className={`cursor-pointer bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleFileUpload}
+                                        disabled={uploading}
+                                    />
+                                    <ImageIcon className="w-4 h-4" />
+                                    {uploading ? '...' : 'Yükle'}
+                                </label>
+                            </div>
                             {store.logo_url && (
                                 <div className="mt-4 p-4 border border-slate-100 rounded-lg bg-slate-50 flex items-center justify-center">
                                     <img src={store.logo_url} alt="Önizleme" className="max-h-20 object-contain" />
