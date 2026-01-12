@@ -5,6 +5,7 @@ import { Search, ChevronDown } from 'lucide-react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
 // Types
 // Types
@@ -179,7 +180,11 @@ export default function StoresPage() {
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredStores.map((store) => (
-                                <div key={store.id} className="bg-white border border-slate-200 p-6 flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
+                                <Link
+                                    href={`/magazalar/${store.slug}`}
+                                    key={store.id}
+                                    className="bg-white border border-slate-200 p-6 flex items-center gap-6 group hover:shadow-lg transition-all duration-300 block"
+                                >
 
                                     {/* Logo Area */}
                                     <div className="w-1/3 shrink-0">
@@ -200,13 +205,13 @@ export default function StoresPage() {
 
                                     {/* Details Area */}
                                     <div className="w-2/3 space-y-2">
-                                        <h3 className="font-bold text-slate-900 leading-tight">{store.name}</h3>
+                                        <h3 className="font-bold text-slate-900 leading-tight group-hover:text-red-600 transition-colors">{store.name}</h3>
                                         <p className="text-sm text-slate-500">{store.category}</p>
                                         <p className="text-sm text-slate-900 font-medium">{store.phone || "-"}</p>
                                         <p className="text-xs text-slate-400">{store.floor}</p>
                                     </div>
 
-                                </div>
+                                </Link>
                             ))}
                         </div>
 
