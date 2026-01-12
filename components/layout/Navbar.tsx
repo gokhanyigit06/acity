@@ -364,12 +364,11 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                                         <ul className="space-y-4">
                                             {displayMenus[activeMenu].items.map((item, idx) => (
                                                 <li key={idx}>
-                                                    <Link
-                                                        href={item.href}
-                                                        className="text-neutral-500 font-medium hover:text-black transition-colors"
+                                                    <span
+                                                        className="text-neutral-500 font-medium block cursor-default"
                                                     >
                                                         {item.label}
-                                                    </Link>
+                                                    </span>
                                                 </li>
                                             ))}
                                         </ul>
