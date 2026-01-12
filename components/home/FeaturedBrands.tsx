@@ -89,7 +89,7 @@ export function FeaturedBrands({ initialData }: FeaturedBrandsProps) {
                 </div>
 
                 <div className="mt-12 text-center">
-                    <Link href="/stores" className="inline-block px-10 py-3 bg-black text-white text-sm font-bold rounded-full hover:bg-slate-800 transition-colors shadow-lg">
+                    <Link href="/magazalar" className="inline-block px-10 py-3 bg-black text-white text-sm font-bold rounded-full hover:bg-slate-800 transition-colors shadow-lg">
                         Tüm Markalar
                     </Link>
                 </div>

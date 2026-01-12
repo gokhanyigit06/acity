@@ -15,12 +15,12 @@ const DEFAULT_CATEGORIES: CategoryCard[] = [
     {
         title: "Lezzetin Adresi: Cafe & Restoran",
         image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80",
-        href: "/dining"
+        href: "/restorantlar"
     },
     {
         title: "Modanın Kalbi: Giyim & Aksesuar",
         image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
-        href: "/stores"
+        href: "/magazalar"
     }
 ];
 

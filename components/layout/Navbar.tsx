@@ -19,11 +19,11 @@ const MEGA_MENUS: Record<string, MegaMenuItem> = {
     "cafe": {
         title: "Cafe & Restorant",
         items: [
-            { label: "Burger King", href: "/cafe/burger-king" },
-            { label: "Terra Pizza", href: "/cafe/terra-pizza" },
-            { label: "Meywa Waffle", href: "/cafe/meywa-waffle" },
+            { label: "Burger King", href: "/restorantlar/burger-king" },
+            { label: "Terra Pizza", href: "/restorantlar/terra-pizza" },
+            { label: "Meywa Waffle", href: "/restorantlar/meywa-waffle" },
         ],
-        cta: { label: "Tüm Restoranlar", href: "/dining" },
+        cta: { label: "Tüm Restoranlar", href: "/restorantlar" },
         images: [
             { src: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=500&q=80", alt: "Burger" },
             { src: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80", alt: "Pizza" },
@@ -33,11 +33,11 @@ const MEGA_MENUS: Record<string, MegaMenuItem> = {
     "stores": {
         title: "Mağazalar",
         items: [
-            { label: "LC WAIKIKI", href: "/stores/lc-waikiki" },
-            { label: "GUESS", href: "/stores/guess" },
-            { label: "TOMMY HILFIGER", href: "/stores/tommy-hilfiger" },
+            { label: "LC WAIKIKI", href: "/magazalar/lc-waikiki" },
+            { label: "GUESS", href: "/magazalar/guess" },
+            { label: "TOMMY HILFIGER", href: "/magazalar/tommy-hilfiger" },
         ],
-        cta: { label: "Tüm Mağazalar", href: "/stores" },
+        cta: { label: "Tüm Mağazalar", href: "/magazalar" },
         images: [
             { src: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500&q=80", alt: "Fashion 1" },
             { src: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80", alt: "Fashion 2" },
@@ -51,7 +51,7 @@ const MEGA_MENUS: Record<string, MegaMenuItem> = {
             { label: "Eğlence Adası", href: "/entertainment" },
             { label: "Kumpanya Kum Havuzu", href: "/kids" },
         ],
-        cta: { label: "Tüm Eğlence", href: "/events" },
+        cta: { label: "Tüm Eğlence", href: "/eglence" },
         images: [
             { src: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80", alt: "Cinema" },
             { src: "https://images.unsplash.com/photo-1566453838764-f6b97f67041b?w=500&q=80", alt: "Playground" },
@@ -253,7 +253,7 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                         </div>
 
                         <Link
-                            href="/contact"
+                            href="/iletisim"
                             className="hover:opacity-70 transition-opacity"
                             onMouseEnter={() => setActiveMenu(null)}
                         >
@@ -327,12 +327,12 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                         <div className="flex-1 overflow-y-auto">
                             <nav className="flex flex-col space-y-6 text-xl font-semibold text-neutral-800">
                                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>ANASAYFA</Link>
-                                <Link href="/dining" onClick={() => setIsMobileMenuOpen(false)}>CAFE & RESTORANT</Link>
-                                <Link href="/stores" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
-                                <Link href="/events" onClick={() => setIsMobileMenuOpen(false)}>EĞLENCE</Link>
+                                <Link href="/restorantlar" onClick={() => setIsMobileMenuOpen(false)}>CAFE & RESTORANT</Link>
+                                <Link href="/magazalar" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
+                                <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>EĞLENCE</Link>
                                 <Link href="/activities" onClick={() => setIsMobileMenuOpen(false)}>ETKİNLİKLER</Link>
                                 <Link href="/campaigns" onClick={() => setIsMobileMenuOpen(false)}>KAMPANYALAR</Link>
-                                <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>İLETİŞİM</Link>
+                                <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)}>İLETİŞİM</Link>
                             </nav>
 
                             <div className="mt-8 pt-8 border-t border-gray-100 flex flex-col gap-4">
