@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Search, Edit, Trash2, Plus, LogOut } from 'lucide-react';
+import { Search, Edit, Trash2, Plus, LogOut, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -70,9 +70,14 @@ export default function AdminDashboard() {
                     <span className="text-sm text-slate-400">|</span>
                     <span className="text-sm font-medium">Mağaza Yönetimi</span>
                 </div>
-                <button onClick={handleLogout} className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors">
-                    <LogOut className="w-4 h-4" /> Çıkış Yap
-                </button>
+                <div className="flex items-center">
+                    <Link href="/admin/settings" className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors mr-6">
+                        <Settings className="w-4 h-4" /> Site Ayarları
+                    </Link>
+                    <button onClick={handleLogout} className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors">
+                        <LogOut className="w-4 h-4" /> Çıkış Yap
+                    </button>
+                </div>
             </header>
 
             <main className="container mx-auto px-6 py-8">
@@ -88,6 +93,14 @@ export default function AdminDashboard() {
                         />
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     </div>
+
+                    <Link
+                        href="/admin/stores/new"
+                        className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                    >
+                        <Plus className="w-5 h-5" />
+                        Yeni Mağaza Ekle
+                    </Link>
                 </div>
 
                 {/* Stats */}

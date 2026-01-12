@@ -1,38 +1,41 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Sliders, MapPin, Phone, ImageIcon, Store as StoreIcon } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
-
-interface Store {
-    id: number;
-    name: string;
-    category: string;
-    floor: string;
-    phone: string;
-    logo_url: string;
-    description: string;
-}
 
 interface Category {
     id: number;
     name: string;
 }
 
-export default function EditStorePage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
-    const [store, setStore] = useState<Store | null>(null);
-    const [categories, setCategories] = useState<Category[]>([]);
+// Temporary slugify function if utils import fails (or we simply add it here for safety)
+function simpleSlugify(text: string) {
+    const trMap: { [key: string]: string } = {
+        'ç': 'c', 'ğ': 'g', 'ı': 'i', 'i': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+        'Ç': 'C', 'Ğ': 'G', 'I': 'I', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U'
+    };
+    let slug = text.replace(/[çğıiöşüÇĞIİÖŞÜ]/g, (char) => trMap[char] || char);
+    return slug.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+}
+
+export default function NewStorePage() {
+    const [name, setName] = useState('');
+    const [category, setCategory] = useState(''); // Primary category for backward compatibility
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]); // Multi-category selection
+    const [floor, setFloor] = useState('');
+    const [phone, setPhone] = useState('');
+    const [logoUrl, setLogoUrl] = useState('');
+
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const router = useRouter();
 
-    // Check Auth & Fetch Data
+    // Check Auth & Fetch Categories
     useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin');
         if (!isAdmin) {
@@ -40,47 +43,24 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
             return;
         }
 
-        const fetchData = async () => {
+        const fetchCategories = async () => {
             try {
-                // Fetch Store
-                const { data: storeData, error: storeError } = await supabase
-                    .from('stores')
-                    .select('*')
-                    .eq('id', id)
-                    .single();
-
-                if (storeError) throw storeError;
-                setStore(storeData);
-
-                // Fetch Categories
-                const { data: catData, error: catError } = await supabase
+                const { data, error } = await supabase
                     .from('categories')
                     .select('*')
                     .order('name');
 
-                if (catError) throw catError;
-                setCategories(catData || []);
-
-                // Fetch Store's Selected Categories from junction table
-                const { data: storeCatData, error: storeCatError } = await supabase
-                    .from('store_categories')
-                    .select('category_id')
-                    .eq('store_id', id);
-
-                if (storeCatError) throw storeCatError;
-                const categoryIds = storeCatData?.map(sc => sc.category_id) || [];
-                setSelectedCategories(categoryIds);
-
+                if (error) throw error;
+                setCategories(data || []);
             } catch (error) {
-                console.error('Error fetching data:', error);
-                setMessage({ type: 'error', text: 'Veri yüklenirken hata oluştu.' });
+                console.error('Error fetching categories:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchData();
-    }, [id, router]);
+        fetchCategories();
+    }, [router]);
 
     const toggleCategory = (categoryId: number) => {
         setSelectedCategories(prev => {
@@ -94,8 +74,6 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!store) return;
-
         setSaving(true);
         setMessage(null);
 
@@ -105,36 +83,37 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
             return;
         }
 
+        const slug = simpleSlugify(name);
         // Use first selected category as primary category for backward compatibility
         const primaryCategory = categories.find(c => c.id === selectedCategories[0])?.name || '';
 
         try {
-            // Update store
-            const { error: storeError } = await supabase
+            // Insert store
+            const { data: storeData, error: storeError } = await supabase
                 .from('stores')
-                .update({
-                    name: store.name,
-                    category: primaryCategory,
-                    floor: store.floor,
-                    phone: store.phone,
-                    logo_url: store.logo_url,
-                    description: store.description
-                })
-                .eq('id', id);
+                .insert([
+                    {
+                        name,
+                        slug,
+                        category: primaryCategory,
+                        floor,
+                        phone,
+                        logo_url: logoUrl
+                    }
+                ])
+                .select()
+                .single();
 
-            if (storeError) throw storeError;
+            if (storeError) {
+                if (storeError.code === '23505') { // Unique violation
+                    throw new Error('Bu isimde bir mağaza zaten var!');
+                }
+                throw storeError;
+            }
 
-            // Delete existing category associations
-            const { error: deleteError } = await supabase
-                .from('store_categories')
-                .delete()
-                .eq('store_id', id);
-
-            if (deleteError) throw deleteError;
-
-            // Insert new category associations
+            // Insert into store_categories junction table
             const categoryInserts = selectedCategories.map(categoryId => ({
-                store_id: parseInt(id),
+                store_id: storeData.id,
                 category_id: categoryId
             }));
 
@@ -144,21 +123,19 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
 
             if (categoryError) throw categoryError;
 
-            setMessage({ type: 'success', text: 'Değişiklikler başarıyla kaydedildi!' });
+            setMessage({ type: 'success', text: 'Mağaza başarıyla oluşturuldu!' });
+            // Redirect after success
+            setTimeout(() => router.push('/admin/dashboard'), 1500);
 
-            // Optional: Redirect back after delay
-            // setTimeout(() => router.push('/admin/dashboard'), 1500);
-
-        } catch (error) {
-            console.error('Error updating store:', error);
-            setMessage({ type: 'error', text: 'Kaydederken bir sorun oluştu.' });
+        } catch (error: any) {
+            console.error('Error creating store:', error);
+            setMessage({ type: 'error', text: error.message || 'Oluştururken bir sorun oluştu.' });
         } finally {
             setSaving(false);
         }
     };
 
     if (loading) return <div className="p-10 text-center">Yükleniyor...</div>;
-    if (!store) return <div className="p-10 text-center text-red-500">Mağaza bulunamadı.</div>;
 
     return (
         <div className="min-h-screen bg-slate-50 pb-20">
@@ -170,8 +147,8 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
                             <ArrowLeft className="w-5 h-5" />
                         </Link>
                         <div>
-                            <h1 className="text-xl font-bold text-slate-900">Mağaza Düzenle</h1>
-                            <p className="text-xs text-slate-500">ID: {store.id}</p>
+                            <h1 className="text-xl font-bold text-slate-900">Yeni Mağaza Ekle</h1>
+                            <p className="text-xs text-slate-500">Yeni bir mağaza kaydı oluşturun</p>
                         </div>
                     </div>
                 </div>
@@ -199,8 +176,9 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
                                 <input
                                     type="text"
                                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
-                                    value={store.name}
-                                    onChange={e => setStore({ ...store, name: e.target.value })}
+                                    placeholder="Örn: Zara"
+                                    value={name}
+                                    onChange={e => setName(e.target.value)}
                                     required
                                 />
                             </div>
@@ -244,8 +222,8 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
                                 <label className="text-sm font-medium text-slate-700">Kat Bilgisi</label>
                                 <select
                                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none bg-white"
-                                    value={store.floor || ''}
-                                    onChange={e => setStore({ ...store, floor: e.target.value })}
+                                    value={floor}
+                                    onChange={e => setFloor(e.target.value)}
                                 >
                                     <option value="">Seçiniz</option>
                                     <option value="Kat -2">Kat -2</option>
@@ -264,8 +242,8 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
                                         type="text"
                                         className="w-full pl-9 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
                                         placeholder="0(312) ..."
-                                        value={store.phone || ''}
-                                        onChange={e => setStore({ ...store, phone: e.target.value })}
+                                        value={phone}
+                                        onChange={e => setPhone(e.target.value)}
                                     />
                                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                 </div>
@@ -286,18 +264,18 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
                                 type="text"
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm font-mono text-slate-600"
                                 placeholder="https://..."
-                                value={store.logo_url || ''}
-                                onChange={e => setStore({ ...store, logo_url: e.target.value })}
+                                value={logoUrl}
+                                onChange={e => setLogoUrl(e.target.value)}
                             />
-                            {store.logo_url && (
+                            {logoUrl && (
                                 <div className="mt-4 p-4 border border-slate-100 rounded-lg bg-slate-50 flex items-center justify-center">
-                                    <img src={store.logo_url} alt="Önizleme" className="max-h-20 object-contain" />
+                                    <img src={logoUrl} alt="Önizleme" className="max-h-20 object-contain" />
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    {/* Save Button */}
+                    {/* Submit Button */}
                     <div className="flex items-center justify-end pt-4">
                         <button
                             type="submit"
@@ -305,7 +283,7 @@ export default function EditStorePage({ params }: { params: Promise<{ id: string
                             className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Save className="w-5 h-5" />
-                            {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+                            {saving ? 'Oluşturuluyor...' : 'Mağazayı Oluştur'}
                         </button>
                     </div>
 

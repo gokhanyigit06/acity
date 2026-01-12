@@ -1,43 +1,60 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { supabase } from '@/lib/supabase';
 
 // Types
-interface EntertainmentSpot {
+interface Store {
     id: number;
     name: string;
     category: string;
     floor: string;
     phone: string;
-    image: string; // Changed logic from 'logo' to generic 'image' or just keep logic similar
+    logo_url: string;
 }
-
-// Mock Data
-const MOCK_ENTERTAINMENT: EntertainmentSpot[] = [
-    { id: 1, name: "Acity Cinevizyon", category: "Sinema", floor: "2. Kat", phone: "0(312) 387 38 38", image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80" },
-    { id: 2, name: "Eğlence Adası", category: "Oyun & Eğlence", floor: "2. Kat", phone: "0(312) 541 20 20", image: "https://images.unsplash.com/photo-1566453838764-f6b97f67041b?w=500&q=80" },
-    { id: 3, name: "Kumpanya Kum Havuzu", category: "Çocuk", floor: "1. Kat", phone: "0(312) 541 10 10", image: "https://images.unsplash.com/photo-1596464716127-f9a804ed15f5?w=500&q=80" },
-    { id: 4, name: "Bowling", category: "Oyun & Eğlence", floor: "2. Kat", phone: "0(312) 541 30 30", image: "https://images.unsplash.com/photo-1533561362705-758fa492572e?w=500&q=80" },
-    { id: 5, name: "Çocuk Treni", category: "Çocuk", floor: "Zemin Kat", phone: "0(312) 541 40 40", image: "https://images.unsplash.com/photo-1516733968668-dbdce39c4651?w=500&q=80" },
-];
 
 const ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
 
 export default function EntertainmentPage() {
+    const [stores, setStores] = useState<Store[]>([]);
+    const [loading, setLoading] = useState(true);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
 
+    // Fetch Data
+    useEffect(() => {
+        const fetchEntertainment = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('stores')
+                    .select('*')
+                    .eq('category', 'Eğlence');
+
+                if (error) throw error;
+                if (data) setStores(data);
+            } catch (error) {
+                console.error('Error fetching entertainment:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEntertainment();
+    }, []);
+
     // Filtering Logic
-    const filteredItems = MOCK_ENTERTAINMENT.filter(item => {
+    const filteredItems = stores.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesLetter = selectedLetter ? item.name.startsWith(selectedLetter) : true;
         const matchesFloor = selectedFloor ? item.floor === selectedFloor : true;
+
+        // Currently data is single category 'Eğlence', but filter ready for expansion
         const matchesCategory = selectedCategory ? item.category === selectedCategory : true;
 
         return matchesSearch && matchesLetter && matchesFloor && matchesCategory;
@@ -62,10 +79,8 @@ export default function EntertainmentPage() {
                                 onChange={(e) => setSelectedFloor(e.target.value)}
                             >
                                 <option value="">Kata Göre</option>
-                                <option value="-1. Kat">-1. Kat</option>
-                                <option value="Zemin Kat">Zemin Kat</option>
-                                <option value="1. Kat">1. Kat</option>
-                                <option value="2. Kat">2. Kat</option>
+                                <option value="Kat 1">Kat 1</option>
+                                <option value="Kat 2">Kat 2</option>
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
@@ -78,9 +93,8 @@ export default function EntertainmentPage() {
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
                                 <option value="">Kategoriye Göre</option>
-                                <option value="Sinema">Sinema</option>
-                                <option value="Oyun & Eğlence">Oyun & Eğlence</option>
-                                <option value="Çocuk">Çocuk</option>
+                                <option value="Eğlence">Tümü (Eğlence)</option>
+                                {/* Future sub-categories like Cinema, Kids Zone etc can be added here once data is enriched */}
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
@@ -122,42 +136,48 @@ export default function EntertainmentPage() {
 
             {/* Results Grid */}
             <div className="container mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredItems.map((item) => (
-                        <div key={item.id} className="bg-white border border-slate-200 p-6 flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
+                {loading ? (
+                    <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredItems.map((item) => (
+                                <div key={item.id} className="bg-white border border-slate-200 p-6 flex items-center gap-6 group hover:shadow-lg transition-all duration-300">
 
-                            {/* Image/Logo Area */}
-                            <div className="w-1/3 shrink-0">
-                                <div className="relative w-full aspect-[3/2] flex items-center justify-center rounded overflow-hidden bg-gray-100">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.name}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                    {/* Fallback for now if image errors, but using unsplash should be fine */}
+                                    {/* Image/Logo Area */}
+                                    <div className="w-1/3 shrink-0">
+                                        <div className="relative w-full aspect-[3/2] flex items-center justify-center rounded overflow-hidden bg-gray-50">
+                                            {item.logo_url ? (
+                                                <img src={item.logo_url} alt={item.name} className="object-cover w-full h-full" />
+                                            ) : (
+                                                <div className="text-xl font-bold text-slate-900 leading-tight text-center break-words p-2">
+                                                    {item.name}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Divider line */}
+                                    <div className="w-px h-20 bg-slate-100" />
+
+                                    {/* Details Area */}
+                                    <div className="w-2/3 space-y-2">
+                                        <h3 className="font-bold text-slate-900 leading-tight">{item.name}</h3>
+                                        <p className="text-sm text-slate-500">{item.category}</p>
+                                        <p className="text-sm text-slate-900 font-medium">{item.phone || "-"}</p>
+                                        <p className="text-xs text-slate-400">{item.floor}</p>
+                                    </div>
+
                                 </div>
-                            </div>
-
-                            {/* Divider line */}
-                            <div className="w-px h-20 bg-slate-100" />
-
-                            {/* Details Area */}
-                            <div className="w-2/3 space-y-2">
-                                <h3 className="font-bold text-slate-900 leading-tight">{item.name}</h3>
-                                <p className="text-sm text-slate-500">{item.category}</p>
-                                <p className="text-sm text-slate-900 font-medium">{item.phone}</p>
-                                <p className="text-xs text-slate-400">{item.floor}</p>
-                            </div>
-
+                            ))}
                         </div>
-                    ))}
-                </div>
 
-                {filteredItems.length === 0 && (
-                    <div className="text-center py-20 text-slate-400">
-                        Aradığınız kriterlere uygun eğlence noktası bulunamadı.
-                    </div>
+                        {filteredItems.length === 0 && (
+                            <div className="text-center py-20 text-slate-400">
+                                Aradığınız kriterlere uygun eğlence noktası bulunamadı.
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 
