@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload } from 'lucide-react';
+import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload, FileSpreadsheet } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -17,8 +17,10 @@ interface Store {
 
 export default function AdminDashboard() {
     const [stores, setStores] = useState<Store[]>([]);
+    const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
     const router = useRouter();
 
     // Check Auth
@@ -29,25 +31,36 @@ export default function AdminDashboard() {
         }
     }, [router]);
 
-    // Fetch Stores
+    // Fetch Data
     useEffect(() => {
-        const fetchStores = async () => {
+        const fetchData = async () => {
             try {
-                const { data, error } = await supabase
+                // Fetch Stores
+                const { data: storesData, error: storesError } = await supabase
                     .from('stores')
                     .select('*')
                     .order('name', { ascending: true });
 
-                if (error) throw error;
-                if (data) setStores(data);
+                if (storesError) throw storesError;
+                if (storesData) setStores(storesData);
+
+                // Fetch Categories
+                const { data: catData, error: catError } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .order('name');
+
+                if (catError) throw catError;
+                if (catData) setCategories(catData);
+
             } catch (error) {
-                console.error('Error fetching stores:', error);
+                console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchStores();
+        fetchData();
     }, []);
 
     const handleLogout = () => {
@@ -55,9 +68,11 @@ export default function AdminDashboard() {
         router.push('/admin');
     };
 
-    const filteredStores = stores.filter(store =>
-        store.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredStores = stores.filter(store => {
+        const matchesSearch = store.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory ? store.category === selectedCategory : true;
+        return matchesSearch && matchesCategory;
+    });
 
     if (loading) return <div className="p-10 text-center">Yükleniyor...</div>;
 
@@ -83,31 +98,52 @@ export default function AdminDashboard() {
             <main className="container mx-auto px-6 py-8">
                 {/* Actions Bar */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-                    <div className="relative w-full md:w-96">
-                        <input
-                            type="text"
-                            placeholder="Mağaza ara..."
-                            className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-red-500"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <div className="flex gap-4 w-full md:w-auto">
+                        <div className="relative w-full md:w-64">
+                            <select
+                                className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white appearance-none"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
+                                <option value="">Tüm Kategoriler</option>
+                                {categories.map(cat => (
+                                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="relative w-full md:w-80">
+                            <input
+                                type="text"
+                                placeholder="Mağaza ara..."
+                                className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        </div>
                     </div>
 
                     <div className="flex gap-2">
+                        <Link
+                            href="/admin/bulk-stores"
+                            className="flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                        >
+                            <FileSpreadsheet className="w-5 h-5" />
+                            Excel Yükle
+                        </Link>
                         <Link
                             href="/admin/bulk-logos"
                             className="flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
                         >
                             <Upload className="w-5 h-5" />
-                            Toplu Logo Yükle
+                            Toplu Logo
                         </Link>
                         <Link
                             href="/admin/stores/new"
                             className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
                         >
                             <Plus className="w-5 h-5" />
-                            Yeni Mağaza Ekle
+                            Yeni Mağaza
                         </Link>
                     </div>
                 </div>
