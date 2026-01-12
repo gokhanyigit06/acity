@@ -234,23 +234,7 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                             <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'events' && "rotate-180")} />
                         </div>
 
-                        {/* Activities Menu */}
-                        <div
-                            className="flex items-center gap-1.5 cursor-pointer h-10 group"
-                            onMouseEnter={() => setActiveMenu('activities')}
-                        >
-                            <span className={cn("transition-opacity", activeMenu === 'activities' ? "text-red-600" : "group-hover:opacity-70")}>ETKİNLİKLER</span>
-                            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'activities' && "rotate-180")} />
-                        </div>
 
-                        {/* Campaigns Menu */}
-                        <div
-                            className="flex items-center gap-1.5 cursor-pointer h-10 group"
-                            onMouseEnter={() => setActiveMenu('campaigns')}
-                        >
-                            <span className={cn("transition-opacity", activeMenu === 'campaigns' ? "text-red-600" : "group-hover:opacity-70")}>KAMPANYALAR</span>
-                            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'campaigns' && "rotate-180")} />
-                        </div>
 
                         <Link
                             href="/iletisim"
@@ -330,8 +314,6 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                                 <Link href="/restorantlar" onClick={() => setIsMobileMenuOpen(false)}>CAFE & RESTORANT</Link>
                                 <Link href="/magazalar" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
                                 <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>EĞLENCE</Link>
-                                <Link href="/activities" onClick={() => setIsMobileMenuOpen(false)}>ETKİNLİKLER</Link>
-                                <Link href="/campaigns" onClick={() => setIsMobileMenuOpen(false)}>KAMPANYALAR</Link>
                                 <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)}>İLETİŞİM</Link>
                             </nav>
 
