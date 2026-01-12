@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Search, Edit, Trash2, Plus, LogOut, Settings } from 'lucide-react';
+import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -94,13 +94,22 @@ export default function AdminDashboard() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     </div>
 
-                    <Link
-                        href="/admin/stores/new"
-                        className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
-                    >
-                        <Plus className="w-5 h-5" />
-                        Yeni Mağaza Ekle
-                    </Link>
+                    <div className="flex gap-2">
+                        <Link
+                            href="/admin/bulk-logos"
+                            className="flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                        >
+                            <Upload className="w-5 h-5" />
+                            Toplu Logo Yükle
+                        </Link>
+                        <Link
+                            href="/admin/stores/new"
+                            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                        >
+                            <Plus className="w-5 h-5" />
+                            Yeni Mağaza Ekle
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Stats */}
