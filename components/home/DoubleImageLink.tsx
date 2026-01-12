@@ -56,9 +56,9 @@ export function DoubleImageLink({ initialData }: DoubleImageLinkProps) {
     const data = categories || DEFAULT_CATEGORIES;
 
     return (
-        <section className="pb-10 pt-4 bg-white">
+        <section className="py-4 bg-white">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {data.map((cat, idx) => (
                         <Link
                             key={idx}
