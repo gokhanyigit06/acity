@@ -54,7 +54,7 @@ export function Footer() {
                     <div>
                         <h4 className="text-3xl font-bold mb-6">Acity Ankara</h4>
                         <ul className="space-y-3 text-lg font-semibold text-slate-800 mb-8">
-                            <li><Link href="/magazalar" className="hover:text-red-600 transition-colors">{t('footer.brands')}</Link></li>
+                            <li><Link href="/hakkimizda" className="hover:text-red-600 transition-colors">Hakkımızda</Link></li>
                             <li><Link href="/iletisim" className="hover:text-red-600 transition-colors">{t('footer.write_us')}</Link></li>
                         </ul>
 

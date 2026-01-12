@@ -237,6 +237,14 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
 
 
                         <Link
+                            href="/hakkimizda"
+                            className="hover:opacity-70 transition-opacity"
+                            onMouseEnter={() => setActiveMenu(null)}
+                        >
+                            HAKKIMIZDA
+                        </Link>
+
+                        <Link
                             href="/iletisim"
                             className="hover:opacity-70 transition-opacity"
                             onMouseEnter={() => setActiveMenu(null)}
@@ -314,6 +322,7 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                                 <Link href="/restorantlar" onClick={() => setIsMobileMenuOpen(false)}>CAFE & RESTORANT</Link>
                                 <Link href="/magazalar" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
                                 <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>EĞLENCE</Link>
+                                <Link href="/hakkimizda" onClick={() => setIsMobileMenuOpen(false)}>HAKKIMIZDA</Link>
                                 <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)}>İLETİŞİM</Link>
                             </nav>
 
