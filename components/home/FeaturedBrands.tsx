@@ -1,46 +1,61 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import Image from 'next/image';
 
-interface Brand {
+export interface Brand {
     id: number;
     name: string;
-    category: string;
+    logoUrl?: string;
 }
 
-export async function FeaturedBrands() {
-    let brands: Brand[] = [];
+const DEFAULT_BRANDS: Brand[] = [
+    { id: 1, name: "GUESS", logoUrl: "" },
+    { id: 2, name: "BOSS", logoUrl: "" },
+    { id: 3, name: "Calvin Klein", logoUrl: "" },
+    { id: 4, name: "GAP", logoUrl: "" },
+    { id: 5, name: "Columbia", logoUrl: "" },
+    { id: 6, name: "SuperStep", logoUrl: "" },
+    { id: 7, name: "Boyner", logoUrl: "" },
+    { id: 8, name: "Marks & Spencer", logoUrl: "" },
+    { id: 9, name: "Tommy Hilfiger", logoUrl: "" },
+    { id: 10, name: "Mavi", logoUrl: "" },
+    { id: 11, name: "Network", logoUrl: "" },
+    { id: 12, name: "Beymen", logoUrl: "" }
+];
 
-    try {
-        if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-            const { data, error } = await supabase
-                .from('brands')
-                .select('id, name, category')
-                .limit(6);
+interface FeaturedBrandsProps {
+    initialData?: Brand[] | null;
+}
 
-            if (!error && data) {
-                brands = data;
+export function FeaturedBrands({ initialData }: FeaturedBrandsProps) {
+    const [brands, setBrands] = useState<Brand[] | null>(initialData || null);
+
+    useEffect(() => {
+        if (initialData) return;
+
+        const fetchSettings = async () => {
+            try {
+                const { data } = await supabase
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'featured_brands')
+                    .single();
+
+                if (data && Array.isArray(data.value)) {
+                    setBrands(data.value);
+                }
+            } catch (error) {
+                console.error('Error fetching featured brands:', error);
             }
-        }
-    } catch (e) {
-        console.error("Supabase connection failed", e);
-    }
+        };
 
-    // Fallback static data extension for 12 items display
-    if (brands.length < 12) {
-        const moreBrands = [
-            { id: 7, name: "GUESS", category: "Giyim" },
-            { id: 8, name: "BOSS", category: "Giyim" },
-            { id: 9, name: "Calvin Klein", category: "Giyim" },
-            { id: 10, name: "GAP", category: "Giyim" },
-            { id: 11, name: "Columbia", category: "Spor" },
-            { id: 12, name: "SuperStep", category: "Ayakkabı" },
-            { id: 13, name: "Boyner", category: "Giyim" },
-            { id: 14, name: "Marks & Spencer", category: "Giyim" },
-            { id: 15, name: "Tommy Hilfiger", category: "Giyim" },
-            { id: 16, name: "Mavi", category: "Giyim" }
-        ];
-        brands = [...brands, ...moreBrands].slice(0, 12);
-    }
+        fetchSettings();
+    }, [initialData]);
+
+    const displayBrands = brands || DEFAULT_BRANDS;
 
     return (
         <section className="pb-10 pt-4 bg-white">
@@ -53,12 +68,22 @@ export async function FeaturedBrands() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    {brands.map((brand) => (
-                        <div key={brand.id} className="group aspect-[4/3] flex items-center justify-center p-6 border border-slate-200 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-white">
-                            {/* Placeholder for Logo - In real app, use Image component */}
-                            <span className="text-lg font-bold text-slate-800 text-center">
-                                {brand.name}
-                            </span>
+                    {displayBrands.map((brand, idx) => (
+                        <div key={idx} className="group aspect-[4/3] flex items-center justify-center p-6 border border-slate-200 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-white relative overflow-hidden">
+                            {brand.logoUrl ? (
+                                <div className="relative w-full h-full">
+                                    <Image
+                                        src={brand.logoUrl}
+                                        alt={brand.name}
+                                        fill
+                                        className="object-contain p-2"
+                                    />
+                                </div>
+                            ) : (
+                                <span className="text-lg font-bold text-slate-800 text-center">
+                                    {brand.name}
+                                </span>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -67,7 +92,6 @@ export async function FeaturedBrands() {
                     <Link href="/stores" className="inline-block px-10 py-3 bg-black text-white text-sm font-bold rounded-full hover:bg-slate-800 transition-colors shadow-lg">
                         Tüm Markalar
                     </Link>
-                    {/* Decorative stars could be added around the button via pseudo-elements or absolute spans if desired */}
                 </div>
             </div>
         </section>

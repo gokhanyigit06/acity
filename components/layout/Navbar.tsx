@@ -88,12 +88,34 @@ const MEGA_MENUS: Record<string, MegaMenuItem> = {
     }
 };
 
-export function Navbar() {
+interface NavbarProps {
+    megaMenuSettings?: Record<string, any>;
+}
+
+export function Navbar({ megaMenuSettings }: NavbarProps) {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
+
+    // Merge default menus with dynamic settings
+    const displayMenus = { ...MEGA_MENUS };
+    if (megaMenuSettings) {
+        Object.keys(displayMenus).forEach(menuKey => {
+            const settingKey = `mega_menu_${menuKey}`;
+            if (megaMenuSettings[settingKey]) {
+                // Override images if present in settings
+                const dynamicData = megaMenuSettings[settingKey];
+                if (dynamicData.images && Array.isArray(dynamicData.images)) {
+                    displayMenus[menuKey] = {
+                        ...displayMenus[menuKey],
+                        images: dynamicData.images
+                    };
+                }
+            }
+        });
+    }
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -293,16 +315,16 @@ export function Navbar() {
                         )}
                         onMouseEnter={() => { }}
                     >
-                        {activeMenu && MEGA_MENUS[activeMenu] && (
+                        {activeMenu && displayMenus[activeMenu] && (
                             <div className="container mx-auto px-4 py-12 flex h-full">
                                 {/* Left Column: Links */}
                                 <div className="w-1/4 flex flex-col justify-between pr-8">
                                     <div>
                                         <h3 className="text-2xl font-bold text-neutral-800 mb-8">
-                                            {MEGA_MENUS[activeMenu].title}
+                                            {displayMenus[activeMenu].title}
                                         </h3>
                                         <ul className="space-y-4">
-                                            {MEGA_MENUS[activeMenu].items.map((item, idx) => (
+                                            {displayMenus[activeMenu].items.map((item, idx) => (
                                                 <li key={idx}>
                                                     <Link
                                                         href={item.href}
@@ -316,17 +338,17 @@ export function Navbar() {
                                     </div>
 
                                     <Link
-                                        href={MEGA_MENUS[activeMenu].cta.href}
+                                        href={displayMenus[activeMenu].cta.href}
                                         className="text-red-600 font-bold text-lg flex items-center gap-2 hover:gap-3 transition-all"
                                     >
-                                        {MEGA_MENUS[activeMenu].cta.label}
+                                        {displayMenus[activeMenu].cta.label}
                                         <ArrowRight className="w-5 h-5" />
                                     </Link>
                                 </div>
 
                                 {/* Right Column: Images */}
                                 <div className="w-3/4 grid grid-cols-3 gap-6">
-                                    {MEGA_MENUS[activeMenu].images.map((img, idx) => (
+                                    {displayMenus[activeMenu].images.map((img, idx) => (
                                         <div key={idx} className="relative h-full rounded-2xl overflow-hidden group">
                                             <Image
                                                 src={img.src}
