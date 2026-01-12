@@ -74,12 +74,11 @@ export function Hero({ initialData }: HeroProps) {
                             />
                         ) : heroData.mediaType === 'image' && heroData.mediaUrl ? (
                             <div className="relative w-full h-full">
-                                <Image
+                                {/* Standard img tag for reliability */}
+                                <img
                                     src={heroData.mediaUrl}
                                     alt={heroData.title}
-                                    fill
-                                    className="object-cover"
-                                    priority // Prioritize loading the hero image
+                                    className="w-full h-full object-cover"
                                 />
                             </div>
                         ) : (

@@ -49,11 +49,11 @@ export function ImageBanner({ initialData }: ImageBannerProps) {
                 <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden">
                     {/* Background Image */}
                     <div className="absolute inset-0 z-0">
-                        <Image
+                        {/* Standard img tag for debugging/reliability */}
+                        <img
                             src={data.imageUrl}
-                            alt="Banner Background"
-                            fill
-                            className="object-cover"
+                            alt="Banner Background" // We can improve this alt text later for i18n
+                            className="w-full h-full object-cover"
                         />
                         {/* Overlay for text readability - slightly darker to match the "shine" contrast */}
                         <div className="absolute inset-0 bg-black/40" />

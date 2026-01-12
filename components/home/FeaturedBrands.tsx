@@ -72,11 +72,11 @@ export function FeaturedBrands({ initialData }: FeaturedBrandsProps) {
                         <div key={idx} className="group aspect-[4/3] flex items-center justify-center p-6 border border-slate-200 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-white relative overflow-hidden">
                             {brand.logoUrl ? (
                                 <div className="relative w-full h-full">
-                                    <Image
+                                    {/* Standard img tag for reliability */}
+                                    <img
                                         src={brand.logoUrl}
                                         alt={brand.name}
-                                        fill
-                                        className="object-contain p-2"
+                                        className="w-full h-full object-contain p-2"
                                     />
                                 </div>
                             ) : (

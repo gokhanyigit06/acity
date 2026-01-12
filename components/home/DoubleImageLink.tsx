@@ -65,11 +65,11 @@ export function DoubleImageLink({ initialData }: DoubleImageLinkProps) {
                             href={cat.href}
                             className="relative aspect-square group overflow-hidden block"
                         >
-                            <Image
+                            {/* Standard img tag for debugging/reliability */}
+                            <img
                                 src={cat.image}
                                 alt={cat.title}
-                                fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             {/* Gradient Overlay for Text Visibility */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
