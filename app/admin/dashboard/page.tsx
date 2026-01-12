@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload, FileSpreadsheet } from 'lucide-react';
+import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload, FileSpreadsheet, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -68,6 +69,21 @@ export default function AdminDashboard() {
         router.push('/admin');
     };
 
+    const handleExportExcel = () => {
+        const dataToExport = filteredStores.map(store => ({
+            "Mağaza Adı": store.name,
+            "Kategori": store.category,
+            "Kat": store.floor,
+            "Telefon": store.phone,
+            "Logo URL": (store as any).logo_url || ''
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(dataToExport);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Mağazalar");
+        XLSX.writeFile(wb, "magazalar-listesi.xlsx");
+    };
+
     const filteredStores = stores.filter(store => {
         const matchesSearch = store.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory ? store.category === selectedCategory : true;
@@ -124,6 +140,13 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="flex gap-2">
+                        <button
+                            onClick={handleExportExcel}
+                            className="flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
+                        >
+                            <Download className="w-5 h-5" />
+                            Excel İndir
+                        </button>
                         <Link
                             href="/admin/bulk-stores"
                             className="flex items-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2 px-4 rounded-lg transition-colors shadow-sm whitespace-nowrap"
