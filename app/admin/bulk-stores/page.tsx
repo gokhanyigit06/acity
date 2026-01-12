@@ -64,7 +64,7 @@ export default function BulkStoresPage() {
                     phone: row['Telefon'] || row['Phone'] || '',
                     description: row['Açıklama'] || row['Description'] || '',
                     logo_url: row['Logo URL'] || row['Logo'] || '',
-                    status: 'pending'
+                    status: 'pending' as ExtractedStore['status']
                 })).filter(s => s.name); // Filter out empty rows
 
                 setStores(extracted);
