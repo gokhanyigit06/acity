@@ -14,11 +14,11 @@ export default function ContactPage() {
             <div className="relative w-full h-[600px] flex items-center bg-zinc-900 overflow-hidden">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0 opacity-60">
-                    <Image
+                    {/* Standard img tag for reliability */}
+                    <img
                         src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=80"
                         alt="Contact Hero"
-                        fill
-                        className="object-cover"
+                        className="w-full h-full object-cover"
                     />
                 </div>
 
@@ -128,11 +128,11 @@ export default function ContactPage() {
 
                         {/* Left Image */}
                         <div className="w-full lg:w-1/2 relative min-h-[500px] lg:min-h-full">
-                            <Image
+                            {/* Standard img tag for reliability */}
+                            <img
                                 src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1000&q=80"
                                 alt="Shopping"
-                                fill
-                                className="object-cover"
+                                className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-black/10" />
                         </div>
@@ -173,6 +173,6 @@ export default function ContactPage() {
             </div>
 
             <Footer />
-        </main>
+        </main >
     );
 }
