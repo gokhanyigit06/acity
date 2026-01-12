@@ -22,6 +22,10 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedFloor, setSelectedFloor] = useState('');
+
+    // Compute unique floors from stores
+    const uniqueFloors = Array.from(new Set(stores.map(s => s.floor).filter(Boolean))).sort();
     const router = useRouter();
 
     // Check Auth
@@ -84,10 +88,29 @@ export default function AdminDashboard() {
         XLSX.writeFile(wb, "magazalar-listesi.xlsx");
     };
 
+    const handleDelete = async (id: number) => {
+        if (!window.confirm('Bu mağazayı silmek istediğinize emin misiniz?')) return;
+
+        try {
+            const { error } = await supabase
+                .from('stores')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+
+            setStores(stores.filter(s => s.id !== id));
+        } catch (error) {
+            console.error('Error deleting store:', error);
+            alert('Silme işleminde hata oluştu.');
+        }
+    };
+
     const filteredStores = stores.filter(store => {
         const matchesSearch = store.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory ? store.category === selectedCategory : true;
-        return matchesSearch && matchesCategory;
+        const matchesFloor = selectedFloor ? store.floor === selectedFloor : true;
+        return matchesSearch && matchesCategory && matchesFloor;
     });
 
     if (loading) return <div className="p-10 text-center">Yükleniyor...</div>;
@@ -124,6 +147,20 @@ export default function AdminDashboard() {
                                 <option value="">Tüm Kategoriler</option>
                                 {categories.map(cat => (
                                     <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="relative w-full md:w-64">
+                            <select
+                                className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white appearance-none"
+                                value={selectedFloor}
+                                onChange={(e) => setSelectedFloor(e.target.value)}
+                            >
+                                <option value="">Tüm Katlar</option>
+                                {uniqueFloors.map(floor => (
+                                    <option key={floor} value={floor}>
+                                        {floor} ({stores.filter(s => s.floor === floor).length})
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -174,8 +211,13 @@ export default function AdminDashboard() {
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                        <div className="text-sm text-slate-500 mb-1">Toplam Mağaza</div>
-                        <div className="text-3xl font-bold text-slate-800">{stores.length}</div>
+                        <div className="text-sm text-slate-500 mb-1">
+                            {searchTerm || selectedCategory || selectedFloor ? 'Listelenen Mağaza' : 'Toplam Mağaza'}
+                        </div>
+                        <div className="text-3xl font-bold text-slate-800">{filteredStores.length}</div>
+                        {(searchTerm || selectedCategory || selectedFloor) && (
+                            <div className="text-xs text-slate-400 mt-1">Toplam: {stores.length}</div>
+                        )}
                     </div>
                     {/* Add more stats if needed */}
                 </div>
@@ -212,7 +254,13 @@ export default function AdminDashboard() {
                                             >
                                                 <Edit className="w-4 h-4" />
                                             </Link>
-                                            {/* Delete functionality to be added later */}
+                                            <button
+                                                onClick={() => handleDelete(store.id)}
+                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Sil"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

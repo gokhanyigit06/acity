@@ -38,11 +38,11 @@ export default function DiningPage() {
 
         const fetchDining = async () => {
             try {
-                // Fetch all stores categorized as 'Yeme-İçme'
+                // Fetch all stores categorized as 'Cafe & Restorant'
                 const { data, error } = await supabase
                     .from('stores')
                     .select('*')
-                    .eq('category', 'Yeme-İçme');
+                    .eq('category', 'Cafe & Restorant');
 
                 if (error) {
                     throw error;
@@ -115,7 +115,7 @@ export default function DiningPage() {
                             >
                                 <option value="">{t('common.category_select')}</option>
                                 {/* Updated options based on current data, can add more as data enriches */}
-                                <option value="Yeme-İçme">{t('category.dining_all')}</option>
+                                <option value="Cafe & Restorant">{t('category.dining_all')}</option>
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>

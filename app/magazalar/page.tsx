@@ -17,6 +17,11 @@ interface Store {
     phone: string;
     logo_url: string;
     slug: string;
+    store_categories?: {
+        categories: {
+            name: string;
+        } | null;
+    }[];
 }
 
 interface Category {
@@ -57,8 +62,15 @@ export default function StoresPage() {
                 // Fetch stores (excluding Dining and Entertainment)
                 const { data: storesData, error } = await supabase
                     .from('stores')
-                    .select('*')
-                    .neq('category', 'Yeme-İçme')
+                    .select(`
+                        *,
+                        store_categories (
+                            categories (
+                                name
+                            )
+                        )
+                    `)
+                    .neq('category', 'Cafe & Restorant')
                     .neq('category', 'Eğlence')
                     .order('name', { ascending: true });
 
@@ -90,7 +102,10 @@ export default function StoresPage() {
         const matchesSearch = store.name.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesLetter = selectedLetter ? store.name.startsWith(selectedLetter) : true;
         const matchesFloor = selectedFloor ? store.floor === selectedFloor : true;
-        const matchesCategory = selectedCategory ? store.category === selectedCategory : true;
+
+        const matchesCategory = selectedCategory
+            ? (store.category === selectedCategory || store.store_categories?.some(sc => sc.categories?.name === selectedCategory))
+            : true;
 
         return matchesSearch && matchesLetter && matchesFloor && matchesCategory;
     });
