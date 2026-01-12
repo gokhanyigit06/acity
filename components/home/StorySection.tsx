@@ -69,11 +69,11 @@ export function StorySection({ initialData }: StorySectionProps) {
                     {/* Right Side - Image */}
                     <div className="relative aspect-square w-full order-1 md:order-2 max-h-[500px]">
                         <div className="relative w-full h-full overflow-hidden">
-                            <Image
+                            {/* Standard img tag for debugging/reliability */}
+                            <img
                                 src={displayData.image}
                                 alt={t('home.story_alt')}
-                                fill
-                                className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                             />
                         </div>
                     </div>

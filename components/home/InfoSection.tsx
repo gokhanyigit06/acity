@@ -54,11 +54,11 @@ export function InfoSection({ initialData }: InfoSectionProps) {
                     {/* Left Side - Image */}
                     <div className="w-full md:w-1/2 relative aspect-[4/3] md:aspect-video lg:aspect-[16/9] max-h-[400px]">
                         <div className="relative w-full h-full overflow-hidden shadow-xl rounded-lg">
-                            <Image
+                            {/* Standard img tag for debugging/reliability */}
+                            <img
                                 src={data.image}
                                 alt={data.smallTitle}
-                                fill
-                                className="object-cover"
+                                className="w-full h-full object-cover"
                             />
                         </div>
                     </div>
