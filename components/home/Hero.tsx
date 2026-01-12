@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
 
-interface HeroSettings {
+export interface HeroSettings {
     mediaType: 'image' | 'video';
     mediaUrl: string;
     title: string;
@@ -18,11 +18,22 @@ const DEFAULT_SETTINGS: HeroSettings = {
     subtitle: "ALIŞVERİŞİN, LEZZETİN VE EĞLENCENİN MERKEZİ"
 };
 
-export function Hero() {
-    const [settings, setSettings] = useState<HeroSettings | null>(null);
-    const [loading, setLoading] = useState(true);
+interface HeroProps {
+    initialData?: HeroSettings | null;
+}
+
+export function Hero({ initialData }: HeroProps) {
+    const [settings, setSettings] = useState<HeroSettings | null>(initialData || null);
+    const [loading, setLoading] = useState(!initialData);
 
     useEffect(() => {
+        // If we already have data from the server, we don't strictly need to fetch again immediately.
+        // But if you want to ensure client-side freshness or if initialData was null for some reason:
+        if (initialData) {
+            setLoading(false);
+            return;
+        }
+
         const fetchSettings = async () => {
             try {
                 const { data, error } = await supabase
@@ -42,7 +53,7 @@ export function Hero() {
         };
 
         fetchSettings();
-    }, []);
+    }, [initialData]);
 
     const heroData = settings || DEFAULT_SETTINGS;
 
@@ -68,6 +79,7 @@ export function Hero() {
                                     alt={heroData.title}
                                     fill
                                     className="object-cover"
+                                    priority // Prioritize loading the hero image
                                 />
                             </div>
                         ) : (

@@ -16,6 +16,7 @@ export default function SiteSettingsPage() {
     const [settings, setSettings] = useState<SiteSetting[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
     const router = useRouter();
 
@@ -44,6 +45,42 @@ export default function SiteSettingsPage() {
 
         fetchSettings();
     }, [router]);
+
+    const handleFileUpload = async (file: File, settingKey: string, field: string, index?: number) => {
+        setUploading(true);
+        setMessage(null);
+
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const filePath = `site-media/${fileName}`;
+
+            // Upload to Supabase Storage
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('image')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (uploadError) throw uploadError;
+
+            // Get public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('image')
+                .getPublicUrl(filePath);
+
+            // Update setting value
+            updateSettingValue(settingKey, field, publicUrl, index);
+
+            setMessage({ type: 'success', text: 'Dosya başarıyla yüklendi!' });
+        } catch (error: any) {
+            console.error('Error uploading file:', error);
+            setMessage({ type: 'error', text: error.message || 'Dosya yüklenirken hata oluştu.' });
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -142,12 +179,36 @@ export default function SiteSettingsPage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Medya URL (Video mp4 veya Resim jpg/png)</label>
-                                    <input
-                                        type="text"
-                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm"
-                                        value={heroSetting.value.mediaUrl}
-                                        onChange={(e) => updateSettingValue('hero_section', 'mediaUrl', e.target.value)}
-                                    />
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            className="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm"
+                                            value={heroSetting.value.mediaUrl}
+                                            onChange={(e) => updateSettingValue('hero_section', 'mediaUrl', e.target.value)}
+                                            placeholder="https://..."
+                                        />
+                                        <label className="relative cursor-pointer">
+                                            <input
+                                                type="file"
+                                                accept={heroSetting.value.mediaType === 'video' ? 'video/*' : 'image/*'}
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) handleFileUpload(file, 'hero_section', 'mediaUrl');
+                                                }}
+                                                disabled={uploading}
+                                            />
+                                            <div className="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50">
+                                                <ImageIcon className="w-4 h-4" />
+                                                {uploading ? 'Yükleniyor...' : 'Dosya Seç'}
+                                            </div>
+                                        </label>
+                                    </div>
+                                    {heroSetting.value.mediaUrl && (
+                                        <div className="mt-2 p-2 bg-slate-50 rounded border border-slate-200">
+                                            <p className="text-xs text-slate-600 break-all">{heroSetting.value.mediaUrl}</p>
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1">Ana Başlık</label>
@@ -197,12 +258,30 @@ export default function SiteSettingsPage() {
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-medium text-slate-500 mb-1">Görsel URL</label>
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-2 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-red-500 outline-none"
-                                                    value={img.src}
-                                                    onChange={(e) => updateSettingValue(setting.key, 'src', e.target.value, index)}
-                                                />
+                                                <div className="flex gap-1">
+                                                    <input
+                                                        type="text"
+                                                        className="flex-1 px-2 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-red-500 outline-none"
+                                                        value={img.src}
+                                                        onChange={(e) => updateSettingValue(setting.key, 'src', e.target.value, index)}
+                                                        placeholder="https://..."
+                                                    />
+                                                    <label className="relative cursor-pointer">
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            className="hidden"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) handleFileUpload(file, setting.key, 'src', index);
+                                                            }}
+                                                            disabled={uploading}
+                                                        />
+                                                        <div className="px-2 py-1.5 bg-slate-600 hover:bg-slate-700 text-white rounded text-xs transition-colors">
+                                                            📁
+                                                        </div>
+                                                    </label>
+                                                </div>
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-medium text-slate-500 mb-1">Alt Metin</label>
