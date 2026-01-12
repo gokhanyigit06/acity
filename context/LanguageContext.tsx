@@ -56,6 +56,12 @@ const translations: Record<string, Record<Language, string>> = {
     'stores.no_results': { tr: 'Aradığınız kriterlere uygun mağaza bulunamadı.', en: 'No stores found matching your criteria.' },
     'category.stores_all': { tr: 'Tümü (Mağazalar)', en: 'All (Stores)' },
 
+    // Events (Entertainment) Page
+    'events.title': { tr: 'Eğlence & Etkinlik', en: 'Entertainment & Events' },
+    'events.search_placeholder': { tr: 'Eğlence Ara', en: 'Search Entertainment' },
+    'events.no_results': { tr: 'Aradığınız kriterlere uygun eğlence noktası bulunamadı.', en: 'No entertainment items found matching your criteria.' },
+    'category.entertainment_all': { tr: 'Tümü (Eğlence)', en: 'All (Entertainment)' },
+
     // Home - Story Section
     'home.story_title': { tr: 'ALIŞVERİŞİN\nPARLAYAN YILDIZI', en: 'THE SHINING STAR\nOF SHOPPING' },
     'home.story_description': { tr: "Acity Mall, Ankara'nın alışveriş ve yaşam kültüründe değişimi izleyen ve yeniliği belirleyen bir konumda yer alıyor. Kuruluş yıllarındaki outlet kimliğinden üst segment bir alışveriş merkezine dönüşerek, seçkin markaları ve özgün deneyimleri bir araya getiriyor.", en: "Acity Mall stands at a position that monitors change and determines innovation in Ankara's shopping and life culture. Transforming from its outlet identity in its founding years to an upper-segment shopping center, it brings together exclusive brands and unique experiences." },

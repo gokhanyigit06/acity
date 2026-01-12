@@ -19,7 +19,10 @@ interface Store {
 
 const ALPHABET = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ".split("");
 
+import { useLanguage } from '@/context/LanguageContext';
+
 export default function EntertainmentPage() {
+    const { t } = useLanguage();
     const [stores, setStores] = useState<Store[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
@@ -27,25 +30,39 @@ export default function EntertainmentPage() {
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
 
-    // Fetch Data
+    // Fetch Data from Supabase
     useEffect(() => {
+        let mounted = true;
+
         const fetchEntertainment = async () => {
             try {
+                // Fetch all stores categorized as 'Eğlence'
                 const { data, error } = await supabase
                     .from('stores')
                     .select('*')
                     .eq('category', 'Eğlence');
 
-                if (error) throw error;
-                if (data) setStores(data);
+                if (error) {
+                    throw error;
+                }
+
+                if (mounted && data) {
+                    setStores(data);
+                }
             } catch (error) {
                 console.error('Error fetching entertainment:', error);
             } finally {
-                setLoading(false);
+                if (mounted) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchEntertainment();
+
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     // Filtering Logic
@@ -67,7 +84,7 @@ export default function EntertainmentPage() {
             {/* Header / Filter Section */}
             <div className="bg-white border-b border-slate-200">
                 <div className="container mx-auto px-4 py-8">
-                    <h1 className="text-3xl font-bold text-slate-900 mb-8">Eğlence & Etkinlik</h1>
+                    <h1 className="text-3xl font-bold text-slate-900 mb-8">{t('events.title')}</h1>
 
                     {/* Top Filters */}
                     <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -78,9 +95,9 @@ export default function EntertainmentPage() {
                                 value={selectedFloor}
                                 onChange={(e) => setSelectedFloor(e.target.value)}
                             >
-                                <option value="">Kata Göre</option>
-                                <option value="Kat 1">Kat 1</option>
-                                <option value="Kat 2">Kat 2</option>
+                                <option value="">{t('common.floor_select')}</option>
+                                <option value="Kat 1">{t('floor.1')}</option>
+                                <option value="Kat 2">{t('floor.2')}</option>
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
                         </div>
@@ -92,8 +109,8 @@ export default function EntertainmentPage() {
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
-                                <option value="">Kategoriye Göre</option>
-                                <option value="Eğlence">Tümü (Eğlence)</option>
+                                <option value="">{t('common.category_select')}</option>
+                                <option value="Eğlence">{t('category.entertainment_all')}</option>
                                 {/* Future sub-categories like Cinema, Kids Zone etc can be added here once data is enriched */}
                             </select>
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500 pointer-events-none" />
@@ -103,7 +120,7 @@ export default function EntertainmentPage() {
                         <div className="relative w-full md:w-1/2 ml-auto">
                             <input
                                 type="text"
-                                placeholder="Eğlence Ara"
+                                placeholder={t('events.search_placeholder')}
                                 className="w-full h-12 pl-4 pr-12 bg-slate-50 border-none text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-100"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -118,7 +135,7 @@ export default function EntertainmentPage() {
                             onClick={() => setSelectedLetter(null)}
                             className={`text-sm font-medium transition-colors ${selectedLetter === null ? 'text-red-600' : 'text-slate-300 hover:text-slate-500'}`}
                         >
-                            TÜMÜ
+                            {t('common.all')}
                         </button>
                         {ALPHABET.map((char) => (
                             <button
@@ -137,7 +154,7 @@ export default function EntertainmentPage() {
             {/* Results Grid */}
             <div className="container mx-auto px-4 py-12">
                 {loading ? (
-                    <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+                    <div className="text-center py-20 text-slate-400">{t('common.loading')}</div>
                 ) : (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -174,7 +191,7 @@ export default function EntertainmentPage() {
 
                         {filteredItems.length === 0 && (
                             <div className="text-center py-20 text-slate-400">
-                                Aradığınız kriterlere uygun eğlence noktası bulunamadı.
+                                {t('events.no_results')}
                             </div>
                         )}
                     </>

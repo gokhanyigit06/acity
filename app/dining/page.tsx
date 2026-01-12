@@ -31,7 +31,40 @@ export default function DiningPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedFloor, setSelectedFloor] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
-    // ...
+    // Fetch Data from Supabase
+    useEffect(() => {
+        let mounted = true;
+
+        const fetchDining = async () => {
+            try {
+                // Fetch all stores categorized as 'Yeme-İçme'
+                const { data, error } = await supabase
+                    .from('stores')
+                    .select('*')
+                    .eq('category', 'Yeme-İçme');
+
+                if (error) {
+                    throw error;
+                }
+
+                if (mounted && data) {
+                    setStores(data);
+                }
+            } catch (error) {
+                console.error('Error fetching dining establishments:', error);
+            } finally {
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchDining();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     // Filtering Logic
     const filteredDining = stores.filter(item => {
