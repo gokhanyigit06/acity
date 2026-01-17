@@ -32,7 +32,7 @@ export function Footer() {
 
                         <div className="text-lg space-y-1 font-semibold text-slate-800 pt-4">
                             <p>{t('footer.phone')}: 444 3 192</p>
-                            <p>{t('footer.email')}: info@acity.com.tr</p>
+                            <p>{t('footer.email')}: info@a1grup.com.tr</p>
                         </div>
 
                         <div className="pt-6">

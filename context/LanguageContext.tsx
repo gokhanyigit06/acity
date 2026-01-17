@@ -83,6 +83,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const savedLang = localStorage.getItem('site_language') as Language;
         if (savedLang && (savedLang === 'tr' || savedLang === 'en')) {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             setLanguage(savedLang);
         }
     }, []);
