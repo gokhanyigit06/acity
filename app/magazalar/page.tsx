@@ -221,7 +221,12 @@ export default function StoresPage() {
                                     {/* Details Area */}
                                     <div className="w-2/3 space-y-2">
                                         <h3 className="font-bold text-slate-900 leading-tight group-hover:text-red-600 transition-colors">{store.name}</h3>
-                                        <p className="text-sm text-slate-500">{store.category}</p>
+                                        <p className="text-sm text-slate-500">
+                                            {[
+                                                store.category,
+                                                ...(store.store_categories?.map(sc => sc.categories?.name) || [])
+                                            ].filter((v, i, a) => v && a.indexOf(v) === i).join(', ')}
+                                        </p>
                                         <p className="text-sm text-slate-900 font-medium">{store.phone || "-"}</p>
                                         <p className="text-xs text-slate-400">{store.floor}</p>
                                     </div>

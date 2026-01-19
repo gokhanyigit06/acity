@@ -207,15 +207,6 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                             ANASAYFA
                         </Link>
 
-                        {/* Cafe Menu */}
-                        <div
-                            className="flex items-center gap-1.5 cursor-pointer h-10 group"
-                            onMouseEnter={() => setActiveMenu('cafe')}
-                        >
-                            <span className={cn("transition-opacity", activeMenu === 'cafe' ? "text-red-600" : "group-hover:opacity-70")}>CAFE & RESTORANT</span>
-                            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'cafe' && "rotate-180")} />
-                        </div>
-
                         {/* Stores Menu */}
                         <div
                             className="flex items-center gap-1.5 cursor-pointer h-10 group"
@@ -225,23 +216,38 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                             <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'stores' && "rotate-180")} />
                         </div>
 
-                        {/* Events Menu */}
+                        {/* Cafe Menu */}
                         <div
                             className="flex items-center gap-1.5 cursor-pointer h-10 group"
-                            onMouseEnter={() => setActiveMenu('events')}
+                            onMouseEnter={() => setActiveMenu('cafe')}
                         >
-                            <span className={cn("transition-opacity", activeMenu === 'events' ? "text-red-600" : "group-hover:opacity-70")}>EĞLENCE</span>
-                            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'events' && "rotate-180")} />
+                            <span className={cn("transition-opacity", activeMenu === 'cafe' ? "text-red-600" : "group-hover:opacity-70")}>CAFE</span>
+                            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'cafe' && "rotate-180")} />
                         </div>
-
-
 
                         <Link
                             href="/hakkimizda"
                             className="hover:opacity-70 transition-opacity"
                             onMouseEnter={() => setActiveMenu(null)}
                         >
-                            HAKKIMIZDA
+                            KURUMSAL
+                        </Link>
+
+                        {/* Events Menu */}
+                        <div
+                            className="flex items-center gap-1.5 cursor-pointer h-10 group"
+                            onMouseEnter={() => setActiveMenu('events')}
+                        >
+                            <span className={cn("transition-opacity", activeMenu === 'events' ? "text-red-600" : "group-hover:opacity-70")}>ETKİNLİKLER / KAMP.</span>
+                            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", activeMenu === 'events' && "rotate-180")} />
+                        </div>
+
+                        <Link
+                            href="/hizmetler"
+                            className="hover:opacity-70 transition-opacity"
+                            onMouseEnter={() => setActiveMenu(null)}
+                        >
+                            HİZMETLER
                         </Link>
 
                         <Link
@@ -319,10 +325,11 @@ export function Navbar({ megaMenuSettings }: NavbarProps) {
                         <div className="flex-1 overflow-y-auto">
                             <nav className="flex flex-col space-y-6 text-xl font-semibold text-neutral-800">
                                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>ANASAYFA</Link>
-                                <Link href="/restorantlar" onClick={() => setIsMobileMenuOpen(false)}>CAFE & RESTORANT</Link>
                                 <Link href="/magazalar" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
-                                <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>EĞLENCE</Link>
-                                <Link href="/hakkimizda" onClick={() => setIsMobileMenuOpen(false)}>HAKKIMIZDA</Link>
+                                <Link href="/restorantlar" onClick={() => setIsMobileMenuOpen(false)}>CAFE</Link>
+                                <Link href="/hakkimizda" onClick={() => setIsMobileMenuOpen(false)}>KURUMSAL</Link>
+                                <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>ETKİNLİKLER / KAMP.</Link>
+                                <Link href="/hizmetler" onClick={() => setIsMobileMenuOpen(false)}>HİZMETLER</Link>
                                 <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)}>İLETİŞİM</Link>
                             </nav>
 
