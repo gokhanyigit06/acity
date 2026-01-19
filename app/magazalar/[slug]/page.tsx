@@ -15,7 +15,11 @@ interface Store {
     floor: string;
     phone: string;
     logo_url: string;
-    slug: string;
+    store_categories?: {
+        categories: {
+            name: string;
+        } | null;
+    }[];
 }
 
 export default function StoreDetailPage() {
@@ -31,7 +35,14 @@ export default function StoreDetailPage() {
             try {
                 const { data, error } = await supabase
                     .from('stores')
-                    .select('*')
+                    .select(`
+                        *,
+                        store_categories (
+                            categories (
+                                name
+                            )
+                        )
+                    `)
                     .eq('slug', params.slug)
                     .single();
 
@@ -117,7 +128,10 @@ export default function StoreDetailPage() {
                             <div>
                                 <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-2">{store.name}</h1>
                                 <span className="inline-block px-3 py-1 bg-red-50 text-red-600 text-sm font-bold tracking-wider uppercase rounded-full">
-                                    {store.category}
+                                    {[
+                                        store.category,
+                                        ...(store.store_categories?.map(sc => sc.categories?.name) || [])
+                                    ].filter((v, i, a) => v && a.indexOf(v) === i).join(', ')}
                                 </span>
                             </div>
 
