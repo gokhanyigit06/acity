@@ -73,12 +73,7 @@ export function Navbar() {
                             MAĞAZALAR
                         </Link>
 
-                        <Link
-                            href="/restorantlar"
-                            className="hover:opacity-70 transition-opacity"
-                        >
-                            CAFE
-                        </Link>
+
 
                         <Link
                             href="/hakkimizda"
@@ -176,7 +171,7 @@ export function Navbar() {
                             <nav className="flex flex-col space-y-6 text-xl font-semibold text-neutral-800">
                                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>ANASAYFA</Link>
                                 <Link href="/magazalar" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
-                                <Link href="/restorantlar" onClick={() => setIsMobileMenuOpen(false)}>CAFE</Link>
+
                                 <Link href="/hakkimizda" onClick={() => setIsMobileMenuOpen(false)}>KURUMSAL</Link>
                                 <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>ETKİNLİKLER / KAMP.</Link>
                                 <Link href="/hizmetler" onClick={() => setIsMobileMenuOpen(false)}>HİZMETLER</Link>

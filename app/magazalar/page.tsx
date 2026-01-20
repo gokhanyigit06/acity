@@ -57,7 +57,6 @@ export default function StoresPage() {
 
                 if (mounted && categoriesData) {
                     const excludedCategories = [
-                        'Cafe Restoranlar', 'Cafe & Restorant',
                         'Mobilya',
                         'Eğlence',
                         'hizmet', 'Hizmet',
@@ -91,7 +90,6 @@ export default function StoresPage() {
                             )
                         )
                     `)
-                    .neq('category', 'Cafe & Restorant')
                     .neq('category', 'Eğlence')
                     .order('name', { ascending: true });
 
