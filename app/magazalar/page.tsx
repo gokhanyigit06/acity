@@ -58,7 +58,6 @@ export default function StoresPage() {
                 if (mounted && categoriesData) {
                     const excludedCategories = [
                         'Mobilya',
-                        'Eğlence',
                         'hizmet', 'Hizmet',
                         'Mağazalar',
                         'giyim moda', 'Giyim & Moda',
@@ -90,7 +89,6 @@ export default function StoresPage() {
                             )
                         )
                     `)
-                    .neq('category', 'Eğlence')
                     .order('name', { ascending: true });
 
                 if (error) {
