@@ -2,24 +2,21 @@ import {
     Wifi, Stethoscope, Luggage, Zap,
     ParkingCircle, Shirt, CreditCard, Handshake,
     Smartphone, Laptop, RefreshCcw,
-    Baby, Accessibility, Wallet
+    Baby, Accessibility, Wallet, Car
 } from 'lucide-react';
 
 const SERVICES = [
     { icon: Wifi, title: "Ücretsiz Hızlı Wi-Fi" },
     { icon: Stethoscope, title: "Sağlık" },
-    { icon: Luggage, title: "Emanet" },
     { icon: Zap, title: "Araç Şarj İstasyonu" },
-    { icon: ParkingCircle, title: "Park & Valet" },
     { icon: Shirt, title: "Kuru Temizleme" },
     { icon: CreditCard, title: "ATM & Bankalar" },
     { icon: Handshake, title: "Müşteri Servisi" },
     { icon: Smartphone, title: "Mobil Şarj İstasyonu" },
     { icon: Laptop, title: "Çalışma Masaları" },
-    { icon: RefreshCcw, title: "Döviz Para Çevirme" },
     { icon: Baby, title: "Bebek Odası" },
     { icon: Accessibility, title: "Engelli Arabası" },
-    { icon: Wallet, title: "Ödeme Desteği" },
+    { icon: Car, title: "Çocuk Arabası (Cozy Car’s)" },
 ];
 
 export function Services() {

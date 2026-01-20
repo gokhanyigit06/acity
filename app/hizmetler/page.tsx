@@ -4,7 +4,7 @@ import {
     Wifi, Stethoscope, Zap,
     Shirt, CreditCard, Handshake,
     Smartphone, Laptop,
-    Baby, Accessibility, Bath, Moon
+    Baby, Accessibility, Bath, Moon, Car
 } from 'lucide-react';
 
 const SERVICES = [
@@ -67,6 +67,11 @@ const SERVICES = [
         icon: Moon,
         title: "Mescit",
         description: "İbadetlerini yerine getirmek isteyen misafirlerimiz için mescitlerimiz en üst katta hizmetinizdedir."
+    },
+    {
+        icon: Car,
+        title: "Çocuk Arabası (Cozy Car’s)",
+        description: "Alışveriş deneyiminizi çocuklarınızla birlikte keyifli hale getirmek için çocuk arabası kiralama hizmetimiz mevcuttur."
     },
 ];
 

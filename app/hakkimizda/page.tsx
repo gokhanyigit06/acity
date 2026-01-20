@@ -5,16 +5,15 @@ import { Footer } from '@/components/layout/Footer';
 import {
     Wifi,
     Heart,
-    Lock,
-    Car,
     Tag,
     CreditCard,
     BatteryCharging,
     Laptop,
-    Banknote,
     Smile,
     Users,
-    HelpingHand
+    Bath,
+    Moon,
+    Car
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -42,16 +41,15 @@ export default function AboutPage() {
     const services = [
         { name: 'Ücretsiz Hızlı Wi-Fi', icon: Wifi },
         { name: 'Sağlık Odası', icon: Heart },
-        { name: 'Emanet Dolapları', icon: Lock },
-        { name: 'Park & Valet', icon: Car },
         { name: 'Kuru Temizleme', icon: Tag },
         { name: 'ATM & Bankalar', icon: CreditCard },
         { name: 'Mobil Şarj İstasyonu', icon: BatteryCharging },
         { name: 'Çalışma Alanları', icon: Laptop },
-        { name: 'Döviz Bürosu', icon: Banknote },
         { name: 'Bebek Bakım Odası', icon: Smile },
         { name: 'Engelli Hizmetleri', icon: Users }, // Generalized icon
-        { name: 'Ödeme Desteği', icon: HelpingHand },
+        { name: 'WC', icon: Bath },
+        { name: 'Mescit', icon: Moon },
+        { name: 'Çocuk Arabası (Cozy Car’s)', icon: Car },
     ];
 
     return (
