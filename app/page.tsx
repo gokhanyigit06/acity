@@ -34,7 +34,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen flex flex-col bg-white">
-      <Navbar megaMenuSettings={settings} />
+      <Navbar />
       <Hero initialData={settings['hero_section']} />
       <InfoSection initialData={settings['info_section']} />
       <ImageBanner initialData={settings['image_banner']} />
