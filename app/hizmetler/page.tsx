@@ -1,10 +1,10 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import {
-    Wifi, Stethoscope, Luggage, Zap,
-    ParkingCircle, Shirt, CreditCard, Handshake,
-    Smartphone, Laptop, RefreshCcw,
-    Baby, Accessibility, Wallet
+    Wifi, Stethoscope, Zap,
+    Shirt, CreditCard, Handshake,
+    Smartphone, Laptop,
+    Baby, Accessibility, Bath, Moon
 } from 'lucide-react';
 
 const SERVICES = [
@@ -19,19 +19,9 @@ const SERVICES = [
         description: "Acil durumlar ve sağlık ihtiyaçlarınız için revirimiz ve uzman sağlık personelimiz zemin katta hizmetinizdedir."
     },
     {
-        icon: Luggage,
-        title: "Emanet",
-        description: "Ağır eşyalarınızı ve alışveriş poşetlerinizi güvenle bırakabileceğiniz emanet dolaplarımız danışma noktasında mevcuttur."
-    },
-    {
         icon: Zap,
         title: "Araç Şarj İstasyonu",
         description: "Elektrikli araçlarınız için kapalı otopark alanımızda hızlı şarj istasyonlarımız bulunmaktadır."
-    },
-    {
-        icon: ParkingCircle,
-        title: "Park & Valet",
-        description: "Geniş kapasiteli kapalı ve açık otoparkımız ve profesyonel vale hizmetimizle park sorunu yaşamayın."
     },
     {
         icon: Shirt,
@@ -59,11 +49,6 @@ const SERVICES = [
         description: "Sessiz bir ortamda çalışmak veya ders çalışmak isteyen misafirlerimiz için özel çalışma alanlarımız bulunmaktadır."
     },
     {
-        icon: RefreshCcw,
-        title: "Döviz Para Çevirme",
-        description: "Yabancı para birimlerini güncel kurlardan çevirebileceğiniz döviz büromuz hizmetinizdedir."
-    },
-    {
         icon: Baby,
         title: "Bebek Odası",
         description: "Annelerin bebeklerinin bakımını rahatça yapabileceği, hijyenik ve modern bebek bakım odalarımız her katta mevcuttur."
@@ -74,9 +59,14 @@ const SERVICES = [
         description: "Yürüme güçlüğü çeken misafirlerimiz için danışma noktasından ücretsiz tekerlekli sandalye temin edebilirsiniz."
     },
     {
-        icon: Wallet,
-        title: "Ödeme Desteği",
-        description: "Mağazalarımızda ve ortak alanlarda temassız ödeme ve çeşitli ödeme kolaylıkları sağlanmaktadır."
+        icon: Bath,
+        title: "WC",
+        description: "Her katta hijyenik ve modern bay-bayan tuvaletlerimiz bulunmaktadır."
+    },
+    {
+        icon: Moon,
+        title: "Mescit",
+        description: "İbadetlerini yerine getirmek isteyen misafirlerimiz için mescitlerimiz en üst katta hizmetinizdedir."
     },
 ];
 

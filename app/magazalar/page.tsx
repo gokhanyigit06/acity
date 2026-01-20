@@ -62,7 +62,8 @@ export default function StoresPage() {
                         'Eğlence',
                         'hizmet', 'Hizmet',
                         'Mağazalar',
-                        'giyim moda', 'Giyim & Moda'
+                        'giyim moda', 'Giyim & Moda',
+                        'Ev & Mobilya'
                     ];
 
                     // Map categories: Rename Standlar to Kiosk
