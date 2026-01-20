@@ -4,6 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Bus, Car } from 'lucide-react';
+import { ServiceSchedule } from '@/components/shared/ServiceSchedule';
 
 export default function ContactPage() {
     return (
@@ -120,6 +121,13 @@ export default function ContactPage() {
 
                 </div>
             </div>
+
+            {/* Contact Info & Map Section */}
+            <div className="container mx-auto px-4 py-20">
+                {/* ... existing content ... */}
+            </div>
+
+            <ServiceSchedule />
 
             {/* Split Section: Image Left, Form Right */}
             <div id="contact-form" className="bg-slate-50 py-20">

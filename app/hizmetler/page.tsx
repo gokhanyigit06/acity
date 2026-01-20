@@ -6,6 +6,7 @@ import {
     Smartphone, Laptop,
     Baby, Accessibility, Bath, Moon, Car
 } from 'lucide-react';
+import { ServiceSchedule } from '@/components/shared/ServiceSchedule';
 
 const SERVICES = [
     {
@@ -106,6 +107,8 @@ export default function ServicesPage() {
                     ))}
                 </div>
             </div>
+
+            <ServiceSchedule />
 
             <Footer />
         </main>
