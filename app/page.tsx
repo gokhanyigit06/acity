@@ -2,10 +2,10 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/home/Hero";
 import { InfoSection } from "@/components/home/InfoSection";
 import { ImageBanner } from "@/components/home/ImageBanner";
-import { DoubleImageLink } from "@/components/home/DoubleImageLink";
+
 import { StorySection } from "@/components/home/StorySection";
-import { FeaturedBrands } from "@/components/home/FeaturedBrands";
-import { ScrollingText } from "@/components/home/ScrollingText";
+
+
 import { Events } from "@/components/home/Events";
 import { Cinema } from "@/components/home/Cinema";
 import { Services } from "@/components/home/Services";
@@ -38,10 +38,10 @@ export default async function Home() {
       <Hero initialData={settings['hero_section']} />
       <InfoSection initialData={settings['info_section']} />
       <ImageBanner initialData={settings['image_banner']} />
-      <DoubleImageLink initialData={settings['double_image_link']} />
+
       <StorySection initialData={settings['story_section']} />
-      <FeaturedBrands initialData={settings['featured_brands']} />
-      <ScrollingText initialData={settings['scrolling_text']} />
+
+
       <Services />
       <Footer />
     </main>
