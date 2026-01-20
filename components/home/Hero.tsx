@@ -23,12 +23,11 @@ interface HeroProps {
 }
 
 export function Hero({ initialData }: HeroProps) {
-    const [settings, setSettings] = useState<HeroSettings | null>(initialData || null);
+    const [settings, setSettings] = useState<HeroSettings | HeroSettings[] | null>(initialData || null);
+    const [currentSlide, setCurrentSlide] = useState(0);
     const [loading, setLoading] = useState(!initialData);
 
     useEffect(() => {
-        // If we already have data from the server, we don't strictly need to fetch again immediately.
-        // But if you want to ensure client-side freshness or if initialData was null for some reason:
         if (initialData) {
             setLoading(false);
             return;
@@ -55,52 +54,99 @@ export function Hero({ initialData }: HeroProps) {
         fetchSettings();
     }, [initialData]);
 
-    const heroData = settings || DEFAULT_SETTINGS;
+    const slides = Array.isArray(settings) ? settings : (settings ? [settings] : [DEFAULT_SETTINGS]);
+
+    useEffect(() => {
+        if (slides.length <= 1) return;
+        const interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [slides.length]);
+
+    const activeSlide = slides[currentSlide];
 
     return (
         <section className="bg-white py-4">
             <div className="container mx-auto px-4">
-                <div className="relative w-full aspect-video md:aspect-auto md:h-[80vh] overflow-hidden bg-black rounded-lg shadow-sm">
-                    {/* Background Media */}
-                    <div className="absolute inset-0 z-0">
-                        {heroData.mediaType === 'video' && heroData.mediaUrl ? (
-                            <video
-                                src={heroData.mediaUrl}
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                className="w-full h-full object-cover"
-                            />
-                        ) : heroData.mediaType === 'image' && heroData.mediaUrl ? (
-                            <div className="relative w-full h-full">
-                                {/* Standard img tag for reliability */}
-                                <img
-                                    src={heroData.mediaUrl}
-                                    alt={heroData.title}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        ) : (
-                            <div className="absolute inset-0 bg-neutral-900" />
-                        )}
+                <div className="relative w-full aspect-video md:aspect-auto md:h-[80vh] overflow-hidden bg-black rounded-lg shadow-sm group">
 
-                        <div className="absolute inset-0 bg-black/30" /> {/* Overlay for text readability */}
+                    {/* Background Media */}
+                    <div className="absolute inset-0 z-0 transition-opacity duration-1000 ease-in-out">
+                        {slides.map((slide, index) => (
+                            <div
+                                key={index}
+                                className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                            >
+                                {slide.mediaType === 'video' && slide.mediaUrl ? (
+                                    <video
+                                        src={slide.mediaUrl}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : slide.mediaType === 'image' && slide.mediaUrl ? (
+                                    <img
+                                        src={slide.mediaUrl}
+                                        alt={slide.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 bg-neutral-900" />
+                                )}
+                                <div className="absolute inset-0 bg-black/30" />
+                            </div>
+                        ))}
                     </div>
 
                     {/* Content Container */}
                     <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
                         <div className="max-w-4xl space-y-6">
-                            <h1 className="text-4xl md:text-7xl font-bold text-white tracking-tight uppercase drop-shadow-lg">
-                                {heroData.title}
+                            <h1 className="text-4xl md:text-7xl font-bold text-white tracking-tight uppercase drop-shadow-lg transition-all duration-700 transform translate-y-0 opacity-100">
+                                {activeSlide.title}
                             </h1>
-                            {heroData.subtitle && (
+                            {activeSlide.subtitle && (
                                 <p className="text-white/90 text-lg md:text-2xl font-light drop-shadow-md">
-                                    {heroData.subtitle}
+                                    {activeSlide.subtitle}
                                 </p>
                             )}
                         </div>
                     </div>
+
+                    {/* Navigation Dots */}
+                    {slides.length > 1 && (
+                        <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3 z-20">
+                            {slides.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentSlide(idx)}
+                                    className={`w-3 h-3 rounded-full transition-all ${idx === currentSlide ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'
+                                        }`}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Navigation Arrows */}
+                    {slides.length > 1 && (
+                        <>
+                            <button
+                                onClick={() => setCurrentSlide(prev => (prev - 1 + slides.length) % slides.length)}
+                                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors opacity-0 group-hover:opacity-100 z-20"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                            </button>
+                            <button
+                                onClick={() => setCurrentSlide(prev => (prev + 1) % slides.length)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors opacity-0 group-hover:opacity-100 z-20"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                            </button>
+                        </>
+                    )}
+
                 </div>
             </div>
         </section>

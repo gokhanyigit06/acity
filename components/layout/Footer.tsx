@@ -20,7 +20,7 @@ export function Footer() {
                     <h3 className="text-xl md:text-2xl font-light tracking-[0.5em] mt-2">ANKARA</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Left Column */}
                     <div className="space-y-6 md:col-span-2">
                         <h4 className="text-3xl font-bold">Acity Alışveriş ve Eğlence Merkezi</h4>
@@ -40,15 +40,7 @@ export function Footer() {
                         </div>
                     </div>
 
-                    {/* Middle Column */}
-                    <div>
-                        <h4 className="text-3xl font-bold mb-6">{t('footer.brands')}</h4>
-                        <ul className="space-y-3 text-lg font-semibold text-slate-800">
-                            <li><Link href="/magazalar" className="hover:text-red-600 transition-colors">{t('nav.stores')}</Link></li>
-                            <li><Link href="/restorantlar" className="hover:text-red-600 transition-colors">{t('nav.dining')}</Link></li>
-                            <li><Link href="/eglence" className="hover:text-red-600 transition-colors">{t('nav.entertainment')}</Link></li>
-                        </ul>
-                    </div>
+
 
                     {/* Right Column */}
                     <div>

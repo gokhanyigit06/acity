@@ -15,12 +15,14 @@ interface SiteSetting {
 const DEFAULT_SETTINGS_MAP: Record<string, { label: string, value: any }> = {
     'hero_section': {
         label: 'Ana Sayfa Banner',
-        value: {
-            mediaType: 'image',
-            mediaUrl: '',
-            title: "ACITY'DE HAYAT",
-            subtitle: "ALIŞVERİŞİN, LEZZETİN VE EĞLENCENİN MERKEZİ"
-        }
+        value: [
+            {
+                mediaType: 'image',
+                mediaUrl: '',
+                title: "ACITY'DE HAYAT",
+                subtitle: "ALIŞVERİŞİN, LEZZETİN VE EĞLENCENİN MERKEZİ"
+            }
+        ]
     },
     'info_section': {
         label: 'Bilgi Alanı (Info Section)',
@@ -212,7 +214,7 @@ export default function SiteSettingsPage() {
                 let updatedValue;
 
                 if (Array.isArray(s.value) && typeof index === 'number') {
-                    // Direct array update (Double Image Link OR Featured Brands)
+                    // Direct array update (Double Image Link OR Featured Brands OR Hero Section)
                     // Create a deep copy for arrays of objects
                     updatedValue = s.value.map((item: any, i: number) =>
                         i === index ? { ...item, [field]: newValue } : item
@@ -274,47 +276,98 @@ export default function SiteSettingsPage() {
                     {/* Hero Section */}
                     {heroSetting && (
                         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
-                            <div className="flex items-center gap-2 border-b border-slate-100 pb-4 mb-4">
-                                <Layout className="w-5 h-5 text-red-600" />
-                                <h2 className="font-semibold text-slate-800">{heroSetting.label}</h2>
+                            <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                                <div className="flex items-center gap-2">
+                                    <Layout className="w-5 h-5 text-red-600" />
+                                    <h2 className="font-semibold text-slate-800">{heroSetting.label} (Slider)</h2>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        // Ensure value is an array
+                                        const currentVal = Array.isArray(heroSetting.value) ? heroSetting.value : [heroSetting.value];
+                                        const newValue = [...currentVal, {
+                                            mediaType: 'image',
+                                            mediaUrl: '',
+                                            title: "Yeni Slayt",
+                                            subtitle: ""
+                                        }];
+                                        // Update the setting with the new array
+                                        setSettings(prev => prev.map(s => {
+                                            if (s.key === 'hero_section') return { ...s, value: newValue };
+                                            return s;
+                                        }));
+                                    }}
+                                    className="text-xs bg-slate-800 text-white px-3 py-1.5 rounded-full hover:bg-slate-900 transition-colors"
+                                >
+                                    + Slayt Ekle
+                                </button>
                             </div>
-                            <div className="grid grid-cols-1 gap-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Medya Tipi</label>
-                                    <select
-                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg outline-none"
-                                        value={heroSetting.value.mediaType}
-                                        onChange={(e) => updateSettingValue('hero_section', 'mediaType', e.target.value)}
-                                    >
-                                        <option value="video">Video</option>
-                                        <option value="image">Resim</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Medya URL</label>
-                                    <div className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm"
-                                            value={heroSetting.value.mediaUrl}
-                                            onChange={(e) => updateSettingValue('hero_section', 'mediaUrl', e.target.value)}
-                                        />
-                                        <label className="cursor-pointer px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg flex items-center gap-2">
-                                            <input type="file" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'hero_section', 'mediaUrl')} />
-                                            <ImageIcon className="w-4 h-4" /> Seç
-                                        </label>
+
+                            <div className="space-y-8">
+                                {(Array.isArray(heroSetting.value) ? heroSetting.value : [heroSetting.value]).map((slide: any, idx: number) => (
+                                    <div key={idx} className="bg-slate-50 p-4 rounded-lg border border-slate-200 relative">
+                                        <div className="absolute top-4 right-4 flex gap-2">
+                                            <span className="bg-white px-2 py-1 text-xs font-bold rounded border border-slate-200">
+                                                #{idx + 1}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const currentVal = Array.isArray(heroSetting.value) ? heroSetting.value : [heroSetting.value];
+                                                    const newValue = currentVal.filter((_: any, i: number) => i !== idx);
+                                                    setSettings(prev => prev.map(s => {
+                                                        if (s.key === 'hero_section') return { ...s, value: newValue };
+                                                        return s;
+                                                    }));
+                                                }}
+                                                className="bg-red-100 text-red-600 hover:bg-red-200 p-1 rounded transition-colors"
+                                                title="Slaytı Sil"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                                            </button>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 gap-6 pt-6">
+                                            <div>
+                                                <label className="block text-sm font-medium text-slate-700 mb-1">Medya Tipi</label>
+                                                <select
+                                                    className="w-full px-3 py-2 border border-slate-300 rounded-lg outline-none"
+                                                    value={slide.mediaType}
+                                                    onChange={(e) => updateSettingValue('hero_section', 'mediaType', e.target.value, idx)}
+                                                >
+                                                    <option value="video">Video</option>
+                                                    <option value="image">Resim</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-slate-700 mb-1">Medya URL</label>
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                                                        value={slide.mediaUrl}
+                                                        onChange={(e) => updateSettingValue('hero_section', 'mediaUrl', e.target.value, idx)}
+                                                    />
+                                                    <label className="cursor-pointer px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg flex items-center gap-2">
+                                                        <input type="file" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'hero_section', 'mediaUrl', idx)} />
+                                                        <ImageIcon className="w-4 h-4" /> Seç
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-slate-700 mb-1">Ana Başlık</label>
+                                                    <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg" value={slide.title} onChange={(e) => updateSettingValue('hero_section', 'title', e.target.value, idx)} />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-slate-700 mb-1">Alt Başlık</label>
+                                                    <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg" value={slide.subtitle} onChange={(e) => updateSettingValue('hero_section', 'subtitle', e.target.value, idx)} />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-1">Ana Başlık</label>
-                                        <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg" value={heroSetting.value.title} onChange={(e) => updateSettingValue('hero_section', 'title', e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-1">Alt Başlık</label>
-                                        <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg" value={heroSetting.value.subtitle} onChange={(e) => updateSettingValue('hero_section', 'subtitle', e.target.value)} />
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     )}
