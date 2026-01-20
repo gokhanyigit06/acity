@@ -98,6 +98,7 @@ export default function DiningPage() {
                                 onChange={(e) => setSelectedFloor(e.target.value)}
                             >
                                 <option value="">{t('common.floor_select')}</option>
+                                <option value="-2. Kat">{t('floor.minus_2')}</option>
                                 <option value="-1. Kat">{t('floor.minus_1')}</option>
                                 <option value="Zemin Kat">{t('floor.ground')}</option>
                                 <option value="1. Kat">{t('floor.1')}</option>

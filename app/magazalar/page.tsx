@@ -56,7 +56,27 @@ export default function StoresPage() {
                     .order('name');
 
                 if (mounted && categoriesData) {
-                    setCategories(categoriesData);
+                    const excludedCategories = [
+                        'Cafe Restoranlar', 'Cafe & Restorant',
+                        'Mobilya',
+                        'Eğlence',
+                        'hizmet', 'Hizmet',
+                        'Mağazalar',
+                        'giyim moda', 'Giyim & Moda'
+                    ];
+
+                    // Map categories: Rename Standlar to Kiosk
+                    const mappedCategories = categoriesData
+                        .map(cat => ({
+                            ...cat,
+                            name: cat.name === 'Standlar' ? 'Kiosk' : cat.name
+                        }))
+                        .filter(cat => !excludedCategories.includes(cat.name));
+
+                    // Remove duplicates if Kiosk already existed and we just renamed Standlar to it
+                    const uniqueCategories = Array.from(new Map(mappedCategories.map(item => [item.name, item])).values());
+
+                    setCategories(uniqueCategories);
                 }
 
                 // Fetch stores (excluding Dining and Entertainment)
@@ -79,7 +99,19 @@ export default function StoresPage() {
                 }
 
                 if (mounted && storesData) {
-                    setStores(storesData);
+                    // Normalize store data to treat Standlar as Kiosk
+                    const mappedStores = storesData.map(store => ({
+                        ...store,
+                        category: store.category === 'Standlar' ? 'Kiosk' : store.category,
+                        store_categories: store.store_categories?.map((sc: any) => ({
+                            ...sc,
+                            categories: sc.categories ? {
+                                ...sc.categories,
+                                name: sc.categories.name === 'Standlar' ? 'Kiosk' : sc.categories.name
+                            } : null
+                        }))
+                    }));
+                    setStores(mappedStores);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -104,7 +136,7 @@ export default function StoresPage() {
         const matchesFloor = selectedFloor ? store.floor === selectedFloor : true;
 
         const matchesCategory = selectedCategory
-            ? (store.category === selectedCategory || store.store_categories?.some(sc => sc.categories?.name === selectedCategory))
+            ? (store.category === selectedCategory || store.store_categories?.some((sc: any) => sc.categories?.name === selectedCategory))
             : true;
 
         return matchesSearch && matchesLetter && matchesFloor && matchesCategory;
@@ -129,6 +161,7 @@ export default function StoresPage() {
                                 onChange={(e) => setSelectedFloor(e.target.value)}
                             >
                                 <option value="">{t('common.floor_select')}</option>
+                                <option value="Kat -2">{t('floor.minus_2')}</option>
                                 <option value="Kat -1">{t('floor.minus_1')}</option>
                                 <option value="Zemin Kat">{t('floor.ground')}</option>
                                 <option value="Kat 1">{t('floor.1')}</option>
@@ -224,7 +257,7 @@ export default function StoresPage() {
                                         <p className="text-sm text-slate-500">
                                             {[
                                                 store.category,
-                                                ...(store.store_categories?.map(sc => sc.categories?.name) || [])
+                                                ...(store.store_categories?.map((sc: any) => sc.categories?.name) || [])
                                             ].filter((v, i, a) => v && a.indexOf(v) === i).join(', ')}
                                         </p>
                                         <p className="text-sm text-slate-900 font-medium">{store.phone || "-"}</p>

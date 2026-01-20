@@ -24,7 +24,7 @@ INSERT INTO categories (name, slug) VALUES
 ('Saat & Mücevherat & Aksesuar', 'saat-mucevherat-aksesuar'),
 ('Sağlık & Güzellik', 'saglik-guzellik'),
 ('Spor', 'spor'),
-('Standlar', 'standlar'),
+('Kiosk', 'kiosk'),
 ('Yeme-İçme', 'yeme-icme'),
 ('Mağazalar', 'magazalar'); 
 -- Added 'Mağazalar' as a general category just in case, as seen in your import list.

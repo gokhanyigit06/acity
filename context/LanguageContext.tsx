@@ -68,6 +68,7 @@ const translations: Record<string, Record<Language, string>> = {
     'home.story_alt': { tr: 'Alışverişin Parlayan Yıldızı', en: 'The Shining Star of Shopping' },
 
     // Floors
+    'floor.minus_2': { tr: 'Kat -2', en: 'Floor -2' },
     'floor.minus_1': { tr: 'Kat -1', en: 'Floor -1' },
     'floor.ground': { tr: 'Zemin Kat', en: 'Ground Floor' },
     'floor.1': { tr: 'Kat 1', en: 'Floor 1' },

@@ -47,7 +47,21 @@ export default function StoreDetailPage() {
                     .single();
 
                 if (error) throw error;
-                setStore(data);
+
+                // Normalize store data to treat Standlar as Kiosk
+                const mappedStore = {
+                    ...data,
+                    category: data.category === 'Standlar' ? 'Kiosk' : data.category,
+                    store_categories: data.store_categories?.map((sc: any) => ({
+                        ...sc,
+                        categories: sc.categories ? {
+                            ...sc.categories,
+                            name: sc.categories.name === 'Standlar' ? 'Kiosk' : sc.categories.name
+                        } : null
+                    }))
+                };
+
+                setStore(mappedStore);
             } catch (err) {
                 console.error('Error fetching store:', err);
                 // Optionally redirect to 404 or list
