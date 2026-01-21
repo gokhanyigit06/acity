@@ -44,6 +44,7 @@ export default function AboutPage() {
             </div>
 
             {/* Main Story Section */}
+            {/* Main Story Section */}
             <section className="py-20 container mx-auto px-4 max-w-5xl">
                 <div className="text-center space-y-8">
                     <span className="text-red-600 font-bold tracking-widest uppercase text-sm block">ALIŞVERİŞİN PARLAYAN YILDIZI</span>
