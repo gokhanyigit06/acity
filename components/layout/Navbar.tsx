@@ -159,7 +159,7 @@ export function Navbar() {
                 )}>
                     <div className="flex flex-col h-full p-6">
                         <div className="flex justify-between items-center mb-8">
-                            <span className="text-2xl font-bold tracking-widest uppercase">Acity Mall</span>
+                            <span className="text-2xl font-bold tracking-widest uppercase text-black">Acity Mall</span>
                             <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
                                 <X className="w-8 h-8" />
                             </button>

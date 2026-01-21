@@ -54,9 +54,9 @@ export function StorySection({ initialData }: StorySectionProps) {
     return (
         <section className="py-4 bg-white">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
                     {/* Left Side - Content */}
-                    <div className="w-full text-center flex flex-col items-center justify-center space-y-4 order-2 md:order-1">
+                    <div className="w-full md:w-1/2 text-center flex flex-col items-center justify-center space-y-6">
                         <h2 className="text-3xl md:text-4xl font-light text-slate-900 leading-tight uppercase tracking-wider whitespace-pre-line">
                             {displayData.title}
                         </h2>
@@ -67,8 +67,8 @@ export function StorySection({ initialData }: StorySectionProps) {
                     </div>
 
                     {/* Right Side - Image */}
-                    <div className="relative aspect-square w-full order-1 md:order-2 max-h-[500px]">
-                        <div className="relative w-full h-full overflow-hidden">
+                    <div className="w-full md:w-1/2 relative aspect-[4/3] md:aspect-video lg:aspect-[16/9] max-h-[400px]">
+                        <div className="relative w-full h-full overflow-hidden shadow-xl rounded-lg">
                             {/* Standard img tag for debugging/reliability */}
                             <img
                                 src={displayData.image}

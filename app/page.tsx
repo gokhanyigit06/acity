@@ -37,9 +37,8 @@ export default async function Home() {
       <Navbar />
       <Hero initialData={settings['hero_section']} />
       <InfoSection initialData={settings['info_section']} />
-      <ImageBanner initialData={settings['image_banner']} />
-
       <StorySection initialData={settings['story_section']} />
+      <ImageBanner initialData={settings['image_banner']} />
 
 
 
