@@ -8,7 +8,7 @@ import { StorySection } from "@/components/home/StorySection";
 
 import { Events } from "@/components/home/Events";
 import { Cinema } from "@/components/home/Cinema";
-import { Services } from "@/components/home/Services";
+
 import { Footer } from "@/components/layout/Footer";
 import { supabase } from "@/lib/supabase";
 
@@ -42,7 +42,7 @@ export default async function Home() {
       <StorySection initialData={settings['story_section']} />
 
 
-      <Services />
+
       <Footer />
     </main>
   );

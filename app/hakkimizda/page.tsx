@@ -2,19 +2,7 @@
 
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import {
-    Wifi,
-    Heart,
-    Tag,
-    CreditCard,
-    BatteryCharging,
-    Laptop,
-    Smile,
-    Users,
-    Bath,
-    Moon,
-    Car
-} from 'lucide-react';
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
@@ -36,21 +24,6 @@ export default function AboutPage() {
 
         fetchSettings();
     }, []);
-
-    // Services data
-    const services = [
-        { name: 'Ücretsiz Hızlı Wi-Fi', icon: Wifi },
-        { name: 'Sağlık Odası', icon: Heart },
-        { name: 'Kuru Temizleme', icon: Tag },
-        { name: 'ATM & Bankalar', icon: CreditCard },
-        { name: 'Mobil Şarj İstasyonu', icon: BatteryCharging },
-        { name: 'Çalışma Alanları', icon: Laptop },
-        { name: 'Bebek Bakım Odası', icon: Smile },
-        { name: 'Engelli Hizmetleri', icon: Users }, // Generalized icon
-        { name: 'WC', icon: Bath },
-        { name: 'Mescit', icon: Moon },
-        { name: 'Çocuk Arabası (Cozy Car’s)', icon: Car },
-    ];
 
     return (
         <div className="min-h-screen bg-white">
@@ -88,26 +61,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Services Grid */}
-            <section className="py-20 bg-slate-50">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-16">
-                        <h3 className="text-3xl font-bold text-slate-900">Hizmetlerimiz</h3>
-                        <p className="text-slate-500 mt-2 text-lg">Konforunuz için düşündüğümüz ayrıcalıklar.</p>
-                    </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                        {services.map((service, idx) => (
-                            <div key={idx} className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center gap-4 group">
-                                <div className="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
-                                    <service.icon className="w-8 h-8" />
-                                </div>
-                                <h4 className="font-semibold text-slate-800 group-hover:text-red-600 transition-colors">{service.name}</h4>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* Sustainability & Values */}
             <section className="py-20 container mx-auto px-4 max-w-7xl">
@@ -163,6 +117,6 @@ export default function AboutPage() {
             </section>
 
             <Footer />
-        </div>
+        </div >
     );
 }

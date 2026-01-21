@@ -153,14 +153,14 @@ export default function SiteSettingsPage() {
         try {
             const fileExt = file.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-            const filePath = `site-media/${fileName}`;
+            const filePath = `settings-media/${fileName}`;
 
             // Upload to Supabase Storage
             const { error: uploadError } = await supabase.storage
                 .from('image')
                 .upload(filePath, file, {
                     cacheControl: '3600',
-                    upsert: false
+                    upsert: true
                 });
 
             if (uploadError) throw uploadError;
@@ -226,7 +226,8 @@ export default function SiteSettingsPage() {
                     updatedValue.images[index] = { ...updatedValue.images[index], [field]: newValue };
                 } else {
                     // Regular object update
-                    updatedValue = { ...s.value, [field]: newValue };
+                    const currentVal = (typeof s.value === 'object' && s.value !== null && !Array.isArray(s.value)) ? s.value : {};
+                    updatedValue = { ...currentVal, [field]: newValue };
                 }
 
                 return { ...s, value: updatedValue };
@@ -645,7 +646,7 @@ export default function SiteSettingsPage() {
                                         <img src={aboutUsSetting.value.image} alt="About Hero" className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex gap-2">
-                                        <input type="text" className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-xs" value={aboutUsSetting.value.image} onChange={(e) => updateSettingValue('about_us', 'image', e.target.value)} />
+                                        <input type="text" className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-xs" value={aboutUsSetting.value?.image || ''} onChange={(e) => updateSettingValue('about_us', 'image', e.target.value)} />
                                         <label className="cursor-pointer px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg flex items-center gap-2">
                                             <input type="file" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0], 'about_us', 'image')} />
                                             <ImageIcon className="w-4 h-4" />

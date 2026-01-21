@@ -12,67 +12,54 @@ const SERVICES = [
     {
         icon: Wifi,
         title: "Ücretsiz Hızlı Wi-Fi",
-        description: "Alışveriş merkezimizin her noktasında kesintisiz ve hızlı internet deneyimi sunuyoruz. Bağlantı için 'Acity_Guest' ağını seçmeniz yeterlidir."
     },
     {
         icon: Stethoscope,
         title: "Sağlık",
-        description: "Acil durumlar ve sağlık ihtiyaçlarınız için revirimiz ve uzman sağlık personelimiz zemin katta hizmetinizdedir."
     },
     {
         icon: Zap,
         title: "Araç Şarj İstasyonu",
-        description: "Elektrikli araçlarınız için kapalı otopark alanımızda hızlı şarj istasyonlarımız bulunmaktadır."
     },
     {
         icon: Shirt,
         title: "Kuru Temizleme",
-        description: "Kıyafetleriniz için hızlı ve güvenilir kuru temizleme hizmetimiz alt zemin katta yer almaktadır."
     },
     {
         icon: CreditCard,
         title: "ATM & Bankalar",
-        description: "Tüm bankacılık işlemlerinizi gerçekleştirebileceğiniz ATM alanlarımız ve banka şubelerimiz mevcuttur."
     },
     {
         icon: Handshake,
         title: "Müşteri Servisi",
-        description: "Görüş, öneri ve şikayetleriniz için danışma bankomuz haftanın her günü hizmetinizdedir."
     },
     {
         icon: Smartphone,
         title: "Mobil Şarj İstasyonu",
-        description: "Telefonunuzun şarjı bitmesin diye ortak alanlarda kullanabileceğiniz powerbank kiralama istasyonlarımız mevcuttur."
     },
     {
         icon: Laptop,
         title: "Çalışma Masaları",
-        description: "Sessiz bir ortamda çalışmak veya ders çalışmak isteyen misafirlerimiz için özel çalışma alanlarımız bulunmaktadır."
     },
     {
         icon: Baby,
         title: "Bebek Odası",
-        description: "Annelerin bebeklerinin bakımını rahatça yapabileceği, hijyenik ve modern bebek bakım odalarımız her katta mevcuttur."
     },
     {
         icon: Accessibility,
         title: "Engelli Arabası",
-        description: "Yürüme güçlüğü çeken misafirlerimiz için danışma noktasından ücretsiz tekerlekli sandalye temin edebilirsiniz."
     },
     {
         icon: Bath,
         title: "WC",
-        description: "Her katta hijyenik ve modern bay-bayan tuvaletlerimiz bulunmaktadır."
     },
     {
         icon: Moon,
         title: "Mescit",
-        description: "İbadetlerini yerine getirmek isteyen misafirlerimiz için mescitlerimiz en üst katta hizmetinizdedir."
     },
     {
         icon: Car,
         title: "Çocuk Arabası (Cozy Car’s)",
-        description: "Alışveriş deneyiminizi çocuklarınızla birlikte keyifli hale getirmek için çocuk arabası kiralama hizmetimiz mevcuttur."
     },
 ];
 
@@ -93,16 +80,13 @@ export default function ServicesPage() {
 
             {/* Services Grid */}
             <div className="container mx-auto px-4 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {SERVICES.map((service, index) => (
-                        <div key={index} className="bg-white p-8 rounded-2xl border border-slate-100 hover:shadow-lg transition-all duration-300 group">
-                            <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-600 transition-colors duration-300">
-                                <service.icon className="w-7 h-7 text-red-600 group-hover:text-white transition-colors duration-300" />
+                        <div key={index} className="bg-white p-8 rounded-2xl border border-slate-100 hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center group h-full justify-center">
+                            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-red-600 transition-colors duration-300">
+                                <service.icon className="w-8 h-8 text-red-600 group-hover:text-white transition-colors duration-300" />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
-                            <p className="text-slate-600 leading-relaxed">
-                                {service.description}
-                            </p>
+                            <h3 className="text-lg font-bold text-slate-900">{service.title}</h3>
                         </div>
                     ))}
                 </div>
