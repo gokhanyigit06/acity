@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload, FileSpreadsheet, Download } from 'lucide-react';
+import { Search, Edit, Trash2, Plus, LogOut, Settings, Upload, FileSpreadsheet, Download, Calendar } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -125,6 +125,9 @@ export default function AdminDashboard() {
                     <span className="text-sm font-medium">Mağaza Yönetimi</span>
                 </div>
                 <div className="flex items-center">
+                    <Link href="/admin/events" className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors mr-6">
+                        <Calendar className="w-4 h-4" /> Etkinlikler
+                    </Link>
                     <Link href="/admin/settings" className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors mr-6">
                         <Settings className="w-4 h-4" /> Site Ayarları
                     </Link>

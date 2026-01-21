@@ -81,10 +81,10 @@ export function Navbar() {
                         </Link>
 
                         <Link
-                            href="/eglence"
+                            href="/etkinlikler"
                             className="hover:opacity-70 transition-opacity"
                         >
-                            ETKİNLİKLER / KAMP.
+                            ETKİNLİKLER & KAMPANYALAR
                         </Link>
 
                         <Link
@@ -170,7 +170,7 @@ export function Navbar() {
                                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>ANASAYFA</Link>
                                 <Link href="/hakkimizda" onClick={() => setIsMobileMenuOpen(false)}>KURUMSAL</Link>
                                 <Link href="/magazalar" onClick={() => setIsMobileMenuOpen(false)}>MAĞAZALAR</Link>
-                                <Link href="/eglence" onClick={() => setIsMobileMenuOpen(false)}>ETKİNLİKLER / KAMP.</Link>
+                                <Link href="/etkinlikler" onClick={() => setIsMobileMenuOpen(false)}>ETKİNLİKLER & KAMPANYALAR</Link>
                                 <Link href="/hizmetler" onClick={() => setIsMobileMenuOpen(false)}>HİZMETLER</Link>
                                 <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)}>İLETİŞİM</Link>
                             </nav>
