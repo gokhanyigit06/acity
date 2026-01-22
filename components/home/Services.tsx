@@ -10,13 +10,13 @@ const SERVICES = [
     { icon: Stethoscope, title: "Sağlık" },
     { icon: Zap, title: "Araç Şarj İstasyonu" },
     { icon: Shirt, title: "Kuru Temizleme" },
-    { icon: CreditCard, title: "ATM & Bankalar" },
+    { icon: CreditCard, title: "ATM" },
     { icon: Handshake, title: "Müşteri Servisi" },
     { icon: Smartphone, title: "Mobil Şarj İstasyonu" },
     { icon: Laptop, title: "Çalışma Masaları" },
     { icon: Baby, title: "Bebek Odası" },
     { icon: Accessibility, title: "Engelli Arabası" },
-    { icon: Car, title: "Çocuk Arabası (Cozy Car’s)" },
+    { icon: Car, title: "Çocuk Arabası" },
 ];
 
 export function Services() {

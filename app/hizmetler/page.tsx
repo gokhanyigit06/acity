@@ -6,7 +6,7 @@ import {
     Smartphone, Laptop,
     Baby, Accessibility, Bath, Moon, Car
 } from 'lucide-react';
-import { ServiceSchedule } from '@/components/shared/ServiceSchedule';
+
 
 const SERVICES = [
     {
@@ -27,7 +27,7 @@ const SERVICES = [
     },
     {
         icon: CreditCard,
-        title: "ATM & Bankalar",
+        title: "ATM",
     },
     {
         icon: Handshake,
@@ -59,7 +59,7 @@ const SERVICES = [
     },
     {
         icon: Car,
-        title: "Çocuk Arabası (Cozy Car’s)",
+        title: "Çocuk Arabası",
     },
 ];
 
@@ -92,7 +92,7 @@ export default function ServicesPage() {
                 </div>
             </div>
 
-            <ServiceSchedule />
+
 
             <Footer />
         </main>

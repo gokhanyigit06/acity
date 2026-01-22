@@ -128,6 +128,9 @@ export default function AdminDashboard() {
                     <Link href="/admin/events" className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors mr-6">
                         <Calendar className="w-4 h-4" /> Etkinlikler
                     </Link>
+                    <Link href="/admin/slider" className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors mr-6">
+                        <FileSpreadsheet className="w-4 h-4" /> Slider
+                    </Link>
                     <Link href="/admin/settings" className="flex items-center gap-2 text-sm text-slate-500 hover:text-red-600 transition-colors mr-6">
                         <Settings className="w-4 h-4" /> Site Ayarları
                     </Link>

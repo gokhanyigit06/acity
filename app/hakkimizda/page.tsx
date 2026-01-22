@@ -37,10 +37,7 @@ export default function AboutPage() {
                     className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/60" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                    <h1 className="text-4xl md:text-6xl font-bold text-white tracking-widest uppercase text-center">HAKKIMIZDA</h1>
-                    <div className="w-24 h-1 bg-white mt-6 rounded-full opacity-80" />
-                </div>
+
             </div>
 
             {/* Main Story Section */}

@@ -7,6 +7,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
 
+import { EventsSlider } from "@/components/events/EventsSlider";
+
 interface Event {
     id: number;
     type: string;
@@ -47,18 +49,32 @@ export default function EventsPage() {
         <main className="min-h-screen flex flex-col bg-slate-50">
             <Navbar />
 
-            {/* Header */}
-            <div className="bg-slate-900 text-white py-16 md:py-24">
-                <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-3xl md:text-5xl font-bold mb-4">Etkinlikler & Kampanyalar</h1>
-                    <p className="text-slate-400 max-w-2xl mx-auto">
-                        Acity'de gerçekleşen tüm etkinlikler, konserler, atölyeler ve kaçırılmayacak kampanya fırsatları burada.
-                    </p>
+            {/* Slider Section */}
+            {!loading && events.length > 0 ? (
+                <EventsSlider events={events} />
+            ) : (
+                /* Fallback Header if no events or loading */
+                <div className="bg-slate-900 text-white py-16 md:py-24">
+                    <div className="container mx-auto px-4 text-center">
+                        <h1 className="text-3xl md:text-5xl font-bold mb-4">Etkinlikler & Kampanyalar</h1>
+                        <p className="text-slate-400 max-w-2xl mx-auto">
+                            Acity'de gerçekleşen tüm etkinlikler, konserler, atölyeler ve kaçırılmayacak kampanya fırsatları burada.
+                        </p>
+                    </div>
                 </div>
-            </div>
+            )}
+
+            {/* If we have a slider, we might still want a title for the list below, or maybe not. 
+                Let's add a small spacer and title if slider is present to separate "Featured" from "All" 
+            */}
+            {!loading && events.length > 0 && (
+                <div className="container mx-auto px-4 pt-16 text-center">
+                    <h2 className="text-3xl font-bold text-slate-900">Tüm Etkinlikler</h2>
+                </div>
+            )}
 
             {/* List */}
-            <div className="container mx-auto px-4 py-16">
+            <div className="container mx-auto px-4 py-8 pb-16">
                 {loading ? (
                     <div className="text-center py-20">Yükleniyor...</div>
                 ) : events.length === 0 ? (
@@ -66,7 +82,7 @@ export default function EventsPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {events.map((item) => (
-                            <Link href={`/etkinlikler/${item.slug}`} key={item.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group border border-slate-100 block">
+                            <Link href={`/etkinlikler/${item.slug}`} key={item.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group border border-slate-100 block hover:-translate-y-1">
                                 {/* Image */}
                                 <div className="aspect-[16/9] relative overflow-hidden bg-slate-100">
                                     <span className={`absolute top-4 left-4 z-10 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full text-white ${item.type === 'event' ? 'bg-blue-600' : 'bg-red-600'
@@ -99,7 +115,7 @@ export default function EventsPage() {
                                         )}
                                     </div>
 
-                                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-red-600 transition-colors">
+                                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-red-600 transition-colors line-clamp-2">
                                         {item.title}
                                     </h3>
 

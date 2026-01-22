@@ -88,7 +88,7 @@ export default function ContactPage() {
 
                         <div className="pt-4">
                             <a
-                                href="https://www.google.com/maps/dir//ACity+Outlet+Al%C4%B1%C5%9Fveri%C5%9F+Merkezi/data=!4m8!4m7!1m0!1m5!1m1!1s0x14d34f9a0a0a0a07:0x6c6c6c6c6c6c6c6c!2m2!1d32.7570413!2d39.960966"
+                                href="https://maps.app.goo.gl/xgXsLkRWZS5HL6JA8"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white font-bold rounded-full hover:bg-slate-800 transition-colors shadow-lg"
@@ -100,24 +100,20 @@ export default function ContactPage() {
                     </div>
 
                     {/* Right: Map */}
-                    <div className="w-full h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-slate-200 relative group">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3058.117187884614!2d32.75704131538356!3d39.96096597942111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d34f9a0a0a0a07%3A0x6c6c6c6c6c6c6c6c!2sACity%20Outlet%20Al%C4%B1%C5%9Fveri%C5%9F%20Merkezi!5e0!3m2!1str!2str!4v1620000000000!5m2!1str!2str"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen={true}
-                            loading="lazy"
-                            className="grayscale group-hover:grayscale-0 transition-all duration-700"
+                    <a
+                        href="https://maps.app.goo.gl/xgXsLkRWZS5HL6JA8"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full h-full cursor-pointer group relative"
+                    >
+                        <img
+                            src="/acity-location-map.png"
+                            alt="Acity Konum"
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                         />
-                        {/* One-click overlay for direction logic if user just clicks map general area */}
-                        <a
-                            href="https://www.google.com/maps/dir//ACity+Outlet+Al%C4%B1%C5%9Fveri%C5%9F+Merkezi/data=!4m8!4m7!1m0!1m5!1m1!1s0x14d34f9a0a0a0a07:0x6c6c6c6c6c6c6c6c!2m2!1d32.7570413!2d39.960966"
-                            target="_blank"
-                            className="absolute inset-0 z-10 block md:hidden"
-                            aria-label="Get Directions"
-                        />
-                    </div>
+                        {/* Overlay for hover state or just accessibility */}
+                        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-0 transition-opacity" />
+                    </a>
 
                 </div>
             </div>
@@ -127,7 +123,7 @@ export default function ContactPage() {
                 {/* ... existing content ... */}
             </div>
 
-            <ServiceSchedule />
+
 
             {/* Split Section: Image Left, Form Right */}
             <div id="contact-form" className="bg-slate-50 py-20">
@@ -179,6 +175,8 @@ export default function ContactPage() {
                     </div>
                 </div>
             </div>
+
+            <ServiceSchedule />
 
             <Footer />
         </main >

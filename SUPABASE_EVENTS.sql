@@ -44,3 +44,4 @@ WHERE NOT EXISTS (SELECT 1 FROM events LIMIT 1);
 INSERT INTO events (title, slug, type, date_text, time_text, location, image_url, description, content, is_active)
 SELECT 'Kış İndirimleri Başladı!', 'kis-indirimleri-basladi', 'campaign', '15 Ocak - 15 Şubat 2024', 'Tüm Gün', 'Tüm Mağazalar', 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&q=80', 'Seçili mağazalarda %50 ye varan kış indirimleri sizi bekliyor.', '<h2>Kış İndirimleri</h2><p>Acity Outlet AVM de kış indirimleri başladı! Dünyaca ünlü markalarda %50 ye varan indirim fırsatlarını kaçırmayın.</p>', true
 WHERE NOT EXISTS (SELECT 1 FROM events WHERE slug = 'kis-indirimleri-basladi');
+Hi

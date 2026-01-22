@@ -6,18 +6,16 @@ import { Search, MapPin, X, Menu } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/context/LanguageContext';
+
 
 export function Navbar() {
-    const { language, setLanguage } = useLanguage();
+
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
 
-    const toggleLanguage = () => {
-        setLanguage(language === 'tr' ? 'en' : 'tr');
-    };
+
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -61,7 +59,7 @@ export function Navbar() {
                     )}>
                         <Link
                             href="/"
-                            className="px-6 py-2.5 rounded-full border border-neutral-300 hover:border-black transition-colors"
+                            className="hover:opacity-70 transition-opacity"
                         >
                             ANASAYFA
                         </Link>
@@ -109,12 +107,7 @@ export function Navbar() {
                             </button>
                         ) : (
                             <>
-                                <button
-                                    onClick={toggleLanguage} // Assuming toggleLanguage and 'language' state are defined elsewhere
-                                    className="hover:opacity-70 transition-opacity text-sm font-bold px-3 py-1 rounded-md border border-neutral-200 hover:border-neutral-800"
-                                >
-                                    {language === 'en' ? 'TR' : 'EN'}
-                                </button>
+
                                 <Link
                                     href="https://www.google.com/maps/dir//Acity+Alışveriş+Merkezi,+Macun,+Fatih+Sultan+Mehmet+Blv+No:244,+06374+Yenimahalle%2FAnkara"
                                     target="_blank"
