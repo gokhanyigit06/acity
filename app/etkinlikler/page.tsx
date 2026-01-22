@@ -21,28 +21,57 @@ interface Event {
     slug: string;
 }
 
+interface SliderItem {
+    id: number;
+    title: string;
+    image_url: string;
+    link?: string;
+    display_order: number;
+    is_active: boolean;
+    description?: string;
+}
+
 export default function EventsPage() {
     const [events, setEvents] = useState<Event[]>([]);
+    const [sliderItems, setSliderItems] = useState<SliderItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchEvents = async () => {
+        const fetchData = async () => {
             try {
-                const { data, error } = await supabase
+                // Fetch Events
+                const { data: eventsData, error: eventsError } = await supabase
                     .from('events')
                     .select('*')
                     .eq('is_active', true)
                     .order('created_at', { ascending: false });
 
-                if (error) throw error;
-                if (data) setEvents(data);
+                if (eventsError) throw eventsError;
+                if (eventsData) setEvents(eventsData);
+
+                // Fetch Slider Items
+                // Note: We use a separate try-catch or safe fetch for slider since table might be new
+                try {
+                    const { data: sliderData, error: sliderError } = await supabase
+                        .from('event_slider')
+                        .select('*')
+                        .eq('is_active', true)
+                        .order('display_order', { ascending: true });
+
+                    if (!sliderError && sliderData) {
+                        setSliderItems(sliderData);
+                    }
+                } catch (sliderErr) {
+                    console.warn("Slider fetch failed:", sliderErr);
+                }
+
             } catch (err) {
-                console.error('Error fetching events:', err);
+                console.error('Error fetching data:', err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchEvents();
+        fetchData();
     }, []);
 
     return (
@@ -50,10 +79,10 @@ export default function EventsPage() {
             <Navbar />
 
             {/* Slider Section */}
-            {!loading && events.length > 0 ? (
-                <EventsSlider events={events} />
+            {!loading && sliderItems.length > 0 ? (
+                <EventsSlider slides={sliderItems} />
             ) : (
-                /* Fallback Header if no events or loading */
+                /* Fallback Header if no slider items */
                 <div className="bg-slate-900 text-white py-16 md:py-24">
                     <div className="container mx-auto px-4 text-center">
                         <h1 className="text-3xl md:text-5xl font-bold mb-4">Etkinlikler & Kampanyalar</h1>
@@ -64,11 +93,9 @@ export default function EventsPage() {
                 </div>
             )}
 
-            {/* If we have a slider, we might still want a title for the list below, or maybe not. 
-                Let's add a small spacer and title if slider is present to separate "Featured" from "All" 
-            */}
-            {!loading && events.length > 0 && (
-                <div className="container mx-auto px-4 pt-16 text-center">
+            {/* List Title - Only show if slider is present to separate sections */}
+            {!loading && sliderItems.length > 0 && (
+                <div className="container mx-auto px-4 pt-8 text-center">
                     <h2 className="text-3xl font-bold text-slate-900">Tüm Etkinlikler</h2>
                 </div>
             )}
