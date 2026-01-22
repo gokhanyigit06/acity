@@ -4,7 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import {
     Wifi, Stethoscope, Zap,
-    Shirt, CreditCard, Handshake,
+    Shirt, CreditCard,
     Smartphone, Laptop,
     Baby, Accessibility, Bath, Moon, Car, Bus,
     Footprints, Scissors, Pill, ParkingCircle, Droplets
@@ -34,10 +34,7 @@ const SERVICES = [
         icon: CreditCard,
         title: "ATM",
     },
-    {
-        icon: Handshake,
-        title: "Müşteri Servisi",
-    },
+
     {
         icon: Smartphone,
         title: "Mobil Şarj İstasyonu",

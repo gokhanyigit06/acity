@@ -1,6 +1,6 @@
 import {
     Wifi, Stethoscope, Luggage, Zap,
-    ParkingCircle, Shirt, CreditCard, Handshake,
+    ParkingCircle, Shirt, CreditCard,
     Smartphone, Laptop, RefreshCcw,
     Baby, Accessibility, Wallet, Car, Bus,
     Footprints, Scissors, Pill, Droplets
@@ -12,7 +12,7 @@ const SERVICES = [
     { icon: Zap, title: "Araç Şarj İstasyonu" },
     { icon: Shirt, title: "Kuru Temizleme" },
     { icon: CreditCard, title: "ATM" },
-    { icon: Handshake, title: "Müşteri Servisi" },
+
     { icon: Smartphone, title: "Mobil Şarj İstasyonu" },
     { icon: Laptop, title: "Çalışma Masaları" },
     { icon: Baby, title: "Bebek Odası" },
