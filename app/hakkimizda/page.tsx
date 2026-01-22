@@ -30,14 +30,13 @@ export default function AboutPage() {
             <Navbar />
 
             {/* Hero Section */}
-            <div className="relative h-[40vh] min-h-[400px] w-full overflow-hidden">
+            <div className="relative w-full">
                 <img
                     src={heroImage}
                     alt="Acity Mall"
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto"
                 />
-                <div className="absolute inset-0 bg-black/60" />
-
+                <div className="absolute inset-0 bg-black/20" />
             </div>
 
             {/* Main Story Section */}

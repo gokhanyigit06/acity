@@ -2,7 +2,7 @@ import {
     Wifi, Stethoscope, Luggage, Zap,
     ParkingCircle, Shirt, CreditCard, Handshake,
     Smartphone, Laptop, RefreshCcw,
-    Baby, Accessibility, Wallet, Car
+    Baby, Accessibility, Wallet, Car, Bus
 } from 'lucide-react';
 
 const SERVICES = [
@@ -17,6 +17,7 @@ const SERVICES = [
     { icon: Baby, title: "Bebek Odası" },
     { icon: Accessibility, title: "Engelli Arabası" },
     { icon: Car, title: "Çocuk Arabası" },
+    { icon: Bus, title: "Müşteri Servisleri" },
 ];
 
 export function Services() {
