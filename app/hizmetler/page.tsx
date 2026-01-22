@@ -6,7 +6,8 @@ import {
     Wifi, Stethoscope, Zap,
     Shirt, CreditCard, Handshake,
     Smartphone, Laptop,
-    Baby, Accessibility, Bath, Moon, Car, Bus
+    Baby, Accessibility, Bath, Moon, Car, Bus,
+    Footprints, Scissors, Pill, ParkingCircle, Droplets
 } from 'lucide-react';
 
 
@@ -68,6 +69,26 @@ const SERVICES = [
     {
         icon: Bus,
         title: "Müşteri Servisleri",
+    },
+    {
+        icon: Footprints,
+        title: "Lostra",
+    },
+    {
+        icon: Scissors,
+        title: "Kuaför & Berber",
+    },
+    {
+        icon: Pill,
+        title: "Eczane",
+    },
+    {
+        icon: ParkingCircle,
+        title: "Otopark",
+    },
+    {
+        icon: Droplets,
+        title: "Su Matik",
     },
 ];
 
