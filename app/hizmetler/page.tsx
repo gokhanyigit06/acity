@@ -7,7 +7,8 @@ import {
     Shirt, CreditCard,
     Smartphone, Laptop,
     Baby, Accessibility, Bath, Moon, Car, Bus,
-    Footprints, Scissors, Pill, ParkingCircle, Droplets
+    Footprints, Scissors, Pill, ParkingCircle, Droplets,
+    CarTaxiFront, Sparkles
 } from 'lucide-react';
 
 
@@ -86,6 +87,14 @@ const SERVICES = [
     {
         icon: Droplets,
         title: "Su Matik",
+    },
+    {
+        icon: Sparkles,
+        title: "Oto Yıkama",
+    },
+    {
+        icon: CarTaxiFront,
+        title: "Taksi",
     },
 ];
 
