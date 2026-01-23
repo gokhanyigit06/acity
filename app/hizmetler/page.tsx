@@ -24,7 +24,22 @@ const SERVICES = [
         title: "Sağlık",
     },
     {
-        icon: Zap,
+        icon: (props: any) => (
+            <div
+                {...props}
+                style={{
+                    maskImage: 'url(/charging-station-icon.png)',
+                    WebkitMaskImage: 'url(/charging-station-icon.png)',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    backgroundColor: 'currentColor',
+                }}
+            />
+        ),
         title: "Araç Şarj İstasyonu",
     },
     {
@@ -45,7 +60,22 @@ const SERVICES = [
         title: "Çalışma Masaları",
     },
     {
-        icon: Baby,
+        icon: (props: any) => (
+            <div
+                {...props}
+                style={{
+                    maskImage: 'url(/baby-room-icon.png)',
+                    WebkitMaskImage: 'url(/baby-room-icon.png)',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    backgroundColor: 'currentColor',
+                }}
+            />
+        ),
         title: "Bebek Odası",
     },
     {
@@ -53,11 +83,41 @@ const SERVICES = [
         title: "Engelli Arabası",
     },
     {
-        icon: Bath,
+        icon: (props: any) => (
+            <div
+                {...props}
+                style={{
+                    maskImage: 'url(/wc-icon.png)',
+                    WebkitMaskImage: 'url(/wc-icon.png)',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    backgroundColor: 'currentColor',
+                }}
+            />
+        ),
         title: "WC",
     },
     {
-        icon: Moon,
+        icon: (props: any) => (
+            <div
+                {...props}
+                style={{
+                    maskImage: 'url(/mescit-icon.png)',
+                    WebkitMaskImage: 'url(/mescit-icon.png)',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain',
+                    backgroundColor: 'currentColor',
+                }}
+            />
+        ),
         title: "Mescit",
     },
     {
