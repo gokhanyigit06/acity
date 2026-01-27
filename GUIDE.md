@@ -43,7 +43,7 @@ Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları i
 Web sitesinin dinamik içeriklerinin çoğu (Mağazalar, Etkinlikler, Slider vb.) **Admin Paneli** üzerinden yönetilebilir.
 
 *   **Giriş Adresi:** `/admin` (örnek: `acity.com.tr/admin`)
-*   **Yetkilendirme:** Şu an için temel bir giriş sistemi veya Supabase Auth kullanılmaktadır.
+*   **Yetkilendirme:** Şu an için temel bir giriş sistemi veya Supabase Auth kullanılmaktadır. 
 
 ### Admin Modülleri:
 

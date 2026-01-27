@@ -4,7 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Bus, Car } from 'lucide-react';
-import { ServiceSchedule } from '@/components/shared/ServiceSchedule';
+
 
 export default function ContactPage() {
     return (
@@ -176,7 +176,7 @@ export default function ContactPage() {
                 </div>
             </div>
 
-            <ServiceSchedule />
+
 
             <Footer />
         </main >

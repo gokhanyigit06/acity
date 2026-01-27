@@ -6,13 +6,13 @@ import {
     Wifi, Stethoscope, Zap,
     Shirt, CreditCard,
     Smartphone, Laptop,
-    Baby, Accessibility, Bath, Moon, Car, Bus,
+    Baby, Accessibility, Bath, Moon, Car,
     Footprints, Scissors, Pill, ParkingCircle, Droplets,
     CarTaxiFront, Sparkles
 } from 'lucide-react';
 
 
-import { ServiceSchedule } from '@/components/shared/ServiceSchedule';
+
 
 const SERVICES = [
     {
@@ -124,10 +124,7 @@ const SERVICES = [
         icon: Car,
         title: "Çocuk Arabası",
     },
-    {
-        icon: Bus,
-        title: "Müşteri Servisleri",
-    },
+
     {
         icon: Footprints,
         title: "Lostra",
@@ -179,8 +176,7 @@ export default function ServicesPage() {
                     {SERVICES.map((service, index) => (
                         <div
                             key={index}
-                            onClick={service.title === "Müşteri Servisleri" ? () => document.getElementById('service-schedule')?.scrollIntoView({ behavior: 'smooth' }) : undefined}
-                            className={`bg-white p-8 rounded-2xl border border-slate-100 hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center group h-full justify-center ${service.title === "Müşteri Servisleri" ? 'cursor-pointer ring-2 ring-transparent hover:ring-red-100' : ''}`}
+                            className="bg-white p-8 rounded-2xl border border-slate-100 hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center group h-full justify-center"
                         >
                             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-red-600 transition-colors duration-300">
                                 <service.icon className="w-8 h-8 text-red-600 group-hover:text-white transition-colors duration-300" />
@@ -191,9 +187,7 @@ export default function ServicesPage() {
                 </div>
             </div>
 
-            <div id="service-schedule">
-                <ServiceSchedule />
-            </div>
+
 
             <Footer />
         </main>
